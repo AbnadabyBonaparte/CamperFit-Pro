@@ -52,6 +52,15 @@ export interface CGResult {
   issues: string[];
 }
 
+// Deflection Result
+export interface DeflectionResult {
+  deflection: number; // mm
+  maxDeflectionPoint: number; // mm (posição X)
+  status: 'safe' | 'warning' | 'critical';
+  issues: string[];
+  recommendations: string[];
+}
+
 // Electrical Result
 export interface ElectricalResult {
   totalLoad: number; // W
