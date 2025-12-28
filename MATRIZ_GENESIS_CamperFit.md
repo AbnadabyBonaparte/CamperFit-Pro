@@ -30,6 +30,9 @@ O **CamperFit Pro** não é apenas uma plataforma SaaS. É um **sistema de engen
 - Configurações de Three.js (cores de materiais)
 - Dimensões de canvas
 
+**Exceções documentadas:**
+- **Logos externos:** Cores hex fixas são permitidas apenas para logos de marcas externas (ex: Google, Facebook) onde as cores são parte da identidade visual oficial. Exemplo: Logo Google em `Login.tsx` usa `#4285F4`, `#34A853`, `#FBBC05`, `#EA4335` (cores oficiais da marca).
+
 **Consequência de violação:** Refatoração obrigatória + revisão de código.
 
 ---

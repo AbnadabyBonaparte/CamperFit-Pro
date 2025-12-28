@@ -1,8 +1,8 @@
 import { useEffect, useRef, useState } from 'react';
 import * as THREE from 'three';
-// @ts-ignore - Three.js examples types may not be perfect
+// @ts-expect-error - Three.js examples types may not be perfect, but OrbitControls works correctly
 import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls.js';
-// @ts-ignore
+// @ts-expect-error - Three.js examples types may not be perfect, but PointerLockControls works correctly
 import { PointerLockControls } from 'three/examples/jsm/controls/PointerLockControls.js';
 import { useProjectStore } from '../../stores/projectStore';
 import { useUIStore } from '../../stores/uiStore';
@@ -81,7 +81,7 @@ export function Canvas3D({ width = CANVAS_DEFAULT_WIDTH, height = CANVAS_DEFAULT
     orbitControls.enableDamping = true;
     orbitControls.dampingFactor = 0.05;
     orbitControls.minDistance = 100;
-    orbitControls.maxDistance = 10000;
+    orbitControls.maxDistance = CAMERA_FAR;
     controlsRef.current = orbitControls;
 
     // Pointer Lock Controls (for first-person mode)

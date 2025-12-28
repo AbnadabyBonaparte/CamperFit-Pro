@@ -75,7 +75,23 @@ export const DEFAULT_VEHICLE_DIMENSIONS: Record<string, {
 // Grid padrão (mm)
 export const DEFAULT_GRID_SIZE = 50;
 
-// Cores padrão (hex)
+// Constantes de tempo (ms)
+export const REFETCH_INTERVAL_MS = 5000;
+
+// Constantes de dimensões
+export const TIRE_WIDTH_MM = 250;
+export const STEEL_DENSITY_KG_M3 = 7850;
+export const MM_TO_M = 1000;
+export const MM2_TO_M2 = 1000000;
+
+// Dimensões padrão para fallback (mm)
+export const DEFAULT_FALLBACK_DIMENSIONS = {
+  width: 1500,
+  length: 2000,
+  height: 1800,
+};
+
+// Cores padrão (hex) - DEPRECATED: Use FALLBACK_COLORS de threeJsConstants.ts
 export const DEFAULT_COLORS = {
   furniture: '#8B7355',
   utility: '#4A90E2',

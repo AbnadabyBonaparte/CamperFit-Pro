@@ -10,11 +10,17 @@ export const Button = forwardRef<HTMLButtonElement, ButtonProps>(
     const baseClasses = 'inline-flex items-center justify-center rounded-md font-medium transition-colors focus:outline-none focus:ring-2 focus:ring-offset-2 disabled:opacity-50 disabled:pointer-events-none';
     
     const variantClasses = {
-      primary: 'bg-[var(--accent-1)] text-white hover:opacity-90 focus:ring-[var(--accent-1)]',
-      secondary: 'bg-[var(--accent-2)] text-white hover:opacity-90 focus:ring-[var(--accent-2)]',
+      primary: 'bg-[var(--accent-1)] hover:opacity-90 focus:ring-[var(--accent-1)]',
+      secondary: 'bg-[var(--accent-2)] hover:opacity-90 focus:ring-[var(--accent-2)]',
       ghost: 'bg-transparent text-[var(--text-primary)] hover:bg-[var(--surface)] focus:ring-[var(--accent-1)]',
-      danger: 'bg-[var(--color-error)] text-white hover:opacity-90 focus:ring-[var(--color-error)]',
+      danger: 'bg-[var(--color-error)] hover:opacity-90 focus:ring-[var(--color-error)]',
     };
+    
+    // Text color based on variant (using CSS variables)
+    // Ghost variant uses text-primary, others use text-on-accent (defined in theme)
+    const textColorClass = variant === 'ghost' 
+      ? 'text-[var(--text-primary)]' 
+      : 'text-[var(--text-on-accent)]';
     
     const sizeClasses = {
       sm: 'px-3 py-1.5 text-sm',
@@ -25,7 +31,7 @@ export const Button = forwardRef<HTMLButtonElement, ButtonProps>(
     return (
       <button
         ref={ref}
-        className={`${baseClasses} ${variantClasses[variant]} ${sizeClasses[size]} ${className}`}
+        className={`${baseClasses} ${variantClasses[variant]} ${textColorClass} ${sizeClasses[size]} ${className}`}
         {...props}
       >
         {children}

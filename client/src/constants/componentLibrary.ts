@@ -1,7 +1,11 @@
 /**
  * Biblioteca de Componentes Internos para Campers
  * 20 componentes essenciais (base para futura expansão de 200+)
+ * 
+ * NOTA: defaultColor usa FALLBACK_COLORS de threeJsConstants.ts via getComponentColor()
  */
+
+import { getComponentColor } from '../utils/getComponentColor';
 
 export type ComponentCategory = 
   | 'sleeping' 
@@ -53,7 +57,7 @@ export const componentLibrary: ComponentLibraryItem[] = [
     dimensions: { length: 1900, width: 1400, height: 400 },
     weight: 45,
     geometryType: 'box',
-    defaultColor: '#8b7355',
+    defaultColor: getComponentColor('sleeping'),
     properties: { material: 'MDF 18mm' },
   },
   {
@@ -64,7 +68,7 @@ export const componentLibrary: ComponentLibraryItem[] = [
     dimensions: { length: 1900, width: 900, height: 400 },
     weight: 25,
     geometryType: 'box',
-    defaultColor: '#8b7355',
+    defaultColor: getComponentColor('sleeping'),
     properties: { material: 'MDF 18mm' },
   },
   {
@@ -75,7 +79,7 @@ export const componentLibrary: ComponentLibraryItem[] = [
     dimensions: { length: 2000, width: 1400, height: 800 },
     weight: 60,
     geometryType: 'box',
-    defaultColor: '#654321',
+    defaultColor: getComponentColor('sleeping'),
     properties: { material: 'Espuma + tecido' },
   },
   
@@ -88,7 +92,7 @@ export const componentLibrary: ComponentLibraryItem[] = [
     dimensions: { length: 1200, width: 600, height: 900 },
     weight: 85,
     geometryType: 'box',
-    defaultColor: '#d3d3d3',
+    defaultColor: getComponentColor('kitchen'),
     properties: { material: 'Compensado naval' },
   },
   {
@@ -99,7 +103,7 @@ export const componentLibrary: ComponentLibraryItem[] = [
     dimensions: { length: 500, width: 500, height: 650 },
     weight: 18,
     geometryType: 'box',
-    defaultColor: '#ffffff',
+    defaultColor: getComponentColor('kitchen'),
     properties: { capacity: 40, voltage: 12, power: 45 },
   },
   {
@@ -110,7 +114,7 @@ export const componentLibrary: ComponentLibraryItem[] = [
     dimensions: { length: 450, width: 550, height: 350 },
     weight: 12,
     geometryType: 'box',
-    defaultColor: '#c0c0c0',
+    defaultColor: getComponentColor('kitchen'),
     properties: { material: 'Aço inox' },
   },
   
@@ -123,7 +127,7 @@ export const componentLibrary: ComponentLibraryItem[] = [
     dimensions: { length: 1200, width: 350, height: 400 },
     weight: 20,
     geometryType: 'box',
-    defaultColor: '#deb887',
+    defaultColor: getComponentColor('storage'),
     properties: { material: 'Compensado naval' },
   },
   {
@@ -134,7 +138,7 @@ export const componentLibrary: ComponentLibraryItem[] = [
     dimensions: { length: 1000, width: 500, height: 700 },
     weight: 35,
     geometryType: 'box',
-    defaultColor: '#deb887',
+    defaultColor: getComponentColor('storage'),
     properties: { material: 'Compensado naval' },
   },
   {
@@ -145,7 +149,7 @@ export const componentLibrary: ComponentLibraryItem[] = [
     dimensions: { length: 800, width: 450, height: 600 },
     weight: 28,
     geometryType: 'box',
-    defaultColor: '#d4a574',
+    defaultColor: getComponentColor('storage'),
     properties: { material: 'MDF' },
   },
   
@@ -158,7 +162,7 @@ export const componentLibrary: ComponentLibraryItem[] = [
     dimensions: { length: 520, width: 240, height: 220 },
     weight: 62,
     geometryType: 'box',
-    defaultColor: '#4a5568',
+    defaultColor: getComponentColor('electrical'),
     properties: { capacity: 200, voltage: 12 },
   },
   {
@@ -169,7 +173,7 @@ export const componentLibrary: ComponentLibraryItem[] = [
     dimensions: { length: 1956, width: 992, height: 40 },
     weight: 22,
     geometryType: 'box',
-    defaultColor: '#1a202c',
+    defaultColor: getComponentColor('electrical'),
     properties: { power: 300, voltage: 12 },
   },
   {
@@ -180,7 +184,7 @@ export const componentLibrary: ComponentLibraryItem[] = [
     dimensions: { length: 300, width: 200, height: 150 },
     weight: 8,
     geometryType: 'box',
-    defaultColor: '#2d3748',
+    defaultColor: getComponentColor('electrical'),
     properties: { power: 1000, voltage: 12 },
   },
   {
@@ -191,7 +195,7 @@ export const componentLibrary: ComponentLibraryItem[] = [
     dimensions: { length: 200, width: 150, height: 80 },
     weight: 1.5,
     geometryType: 'box',
-    defaultColor: '#4a5568',
+    defaultColor: getComponentColor('electrical'),
     properties: { voltage: 12, current: 30 },
   },
   
@@ -204,7 +208,7 @@ export const componentLibrary: ComponentLibraryItem[] = [
     dimensions: { length: 600, width: 400, height: 500 },
     weight: 5, // vazio
     geometryType: 'cylinder',
-    defaultColor: '#87ceeb',
+    defaultColor: getComponentColor('plumbing'),
     properties: { capacity: 100 },
   },
   {
@@ -215,7 +219,7 @@ export const componentLibrary: ComponentLibraryItem[] = [
     dimensions: { length: 500, width: 350, height: 400 },
     weight: 3,
     geometryType: 'cylinder',
-    defaultColor: '#87ceeb',
+    defaultColor: getComponentColor('plumbing'),
     properties: { capacity: 50 },
   },
   {
@@ -226,7 +230,7 @@ export const componentLibrary: ComponentLibraryItem[] = [
     dimensions: { length: 350, width: 350, height: 650 },
     weight: 14, // vazio
     geometryType: 'cylinder',
-    defaultColor: '#c0c0c0',
+    defaultColor: getComponentColor('plumbing'),
     properties: { capacity: 13 },
   },
   
@@ -239,7 +243,7 @@ export const componentLibrary: ComponentLibraryItem[] = [
     dimensions: { length: 1200, width: 700, height: 750 },
     weight: 15,
     geometryType: 'box',
-    defaultColor: '#d4a574',
+    defaultColor: getComponentColor('furniture'),
     properties: { material: 'Compensado naval' },
   },
   {
@@ -250,7 +254,7 @@ export const componentLibrary: ComponentLibraryItem[] = [
     dimensions: { length: 400, width: 400, height: 850 },
     weight: 3,
     geometryType: 'box',
-    defaultColor: '#8b4513',
+    defaultColor: getComponentColor('furniture'),
     properties: { material: 'Alumínio + tecido' },
   },
   {
@@ -261,7 +265,7 @@ export const componentLibrary: ComponentLibraryItem[] = [
     dimensions: { length: 900, width: 900, height: 2000 },
     weight: 120,
     geometryType: 'box',
-    defaultColor: '#ffffff',
+    defaultColor: getComponentColor('furniture'),
     properties: { material: 'Acrílico' },
   },
   {
@@ -272,7 +276,7 @@ export const componentLibrary: ComponentLibraryItem[] = [
     dimensions: { length: 800, width: 800, height: 1950 },
     weight: 45,
     geometryType: 'box',
-    defaultColor: '#e0e0e0',
+    defaultColor: getComponentColor('furniture'),
     properties: { material: 'Acrílico' },
   },
 ];

@@ -4,6 +4,7 @@ import { Button } from '../ui/Button';
 import { Input } from '../ui/Input';
 import { Textarea } from '../ui/Textarea';
 import { Select } from '../ui/Select';
+import { DEFAULT_VEHICLE_DIMENSIONS } from '../../../shared/const';
 
 interface NewProjectDialogProps {
   isOpen: boolean;
@@ -21,30 +22,32 @@ interface NewProjectDialogProps {
 }
 
 export function NewProjectDialog({ isOpen, onClose, onCreate }: NewProjectDialogProps) {
+  const defaultDims = DEFAULT_VEHICLE_DIMENSIONS.custom;
   const [formData, setFormData] = useState({
     name: '',
     description: '',
-    vehicleType: 'custom',
-    length: 5000,
-    width: 2000,
-    height: 2500,
-    wheelbase: 3000,
-    maxGVWR: 3500,
+    vehicleType: 'custom' as const,
+    length: defaultDims.length,
+    width: defaultDims.width,
+    height: defaultDims.height,
+    wheelbase: defaultDims.wheelbase,
+    maxGVWR: defaultDims.maxGVWR,
   });
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     if (!formData.name.trim()) return;
     onCreate(formData);
+    const resetDims = DEFAULT_VEHICLE_DIMENSIONS.custom;
     setFormData({
       name: '',
       description: '',
-      vehicleType: 'custom',
-      length: 5000,
-      width: 2000,
-      height: 2500,
-      wheelbase: 3000,
-      maxGVWR: 3500,
+      vehicleType: 'custom' as const,
+      length: resetDims.length,
+      width: resetDims.width,
+      height: resetDims.height,
+      wheelbase: resetDims.wheelbase,
+      maxGVWR: resetDims.maxGVWR,
     });
     onClose();
   };

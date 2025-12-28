@@ -1,7 +1,12 @@
 /**
  * Biblioteca de Materiais para Campers
  * Densidades em kg/m³ ou kg/m² conforme aplicável
+ * 
+ * NOTA: visualColor usa FALLBACK_COLORS de threeJsConstants.ts via getMaterialColor()
  */
+
+import { getMaterialColor } from '../utils/getComponentColor';
+import { MM_TO_M } from '../../../shared/const';
 
 export type MaterialCategory = 
   | 'estrutura' 
@@ -43,7 +48,7 @@ export const materials: Material[] = [
     density: 7850, // kg/m³ (aço)
     thickness: 3,
     costPerM2: 85, // R$/m² (estimado, baseado em metro linear)
-    visualColor: '#8b8b8b', // Cinza metálico
+    visualColor: getMaterialColor('estrutura'),
   },
   {
     id: 'metalon-40x40x3',
@@ -52,7 +57,7 @@ export const materials: Material[] = [
     density: 7850,
     thickness: 3,
     costPerM2: 70,
-    visualColor: '#8b8b8b',
+    visualColor: getMaterialColor('estrutura'),
   },
   {
     id: 'metalon-30x30x2',
@@ -61,7 +66,7 @@ export const materials: Material[] = [
     density: 7850,
     thickness: 2,
     costPerM2: 50,
-    visualColor: '#8b8b8b',
+    visualColor: getMaterialColor('estrutura'),
   },
   
   // ===== REVESTIMENTO EXTERNO =====
@@ -73,7 +78,7 @@ export const materials: Material[] = [
     thickness: 3,
     thermalR: 0.05,
     costPerM2: 180,
-    visualColor: '#c0c0c0', // Prateado
+    visualColor: getMaterialColor('revestimento-externo'),
   },
   {
     id: 'fibra-vidro-3mm',
@@ -83,7 +88,7 @@ export const materials: Material[] = [
     thickness: 3,
     thermalR: 0.02,
     costPerM2: 120,
-    visualColor: '#ffffff', // Branco
+    visualColor: getMaterialColor('revestimento-externo'),
   },
   {
     id: 'chapa-aluminio-2mm',
@@ -93,7 +98,7 @@ export const materials: Material[] = [
     thickness: 2,
     thermalR: 0.001,
     costPerM2: 95,
-    visualColor: '#e0e0e0', // Prateado claro
+    visualColor: getMaterialColor('revestimento-externo'),
   },
   
   // ===== ISOLAMENTO =====
@@ -105,7 +110,7 @@ export const materials: Material[] = [
     thickness: 50,
     thermalR: 2.0, // Excelente isolante
     costPerM2: 85,
-    visualColor: '#ffeaa7', // Amarelo claro
+    visualColor: getMaterialColor('isolamento'),
   },
   {
     id: 'divinycell-h80-50mm',
@@ -115,7 +120,7 @@ export const materials: Material[] = [
     thickness: 50,
     thermalR: 1.8,
     costPerM2: 180,
-    visualColor: '#ffeaa7',
+    visualColor: getMaterialColor('isolamento'),
   },
   {
     id: '3tc-50mm',
@@ -125,7 +130,7 @@ export const materials: Material[] = [
     thickness: 50,
     thermalR: 1.5,
     costPerM2: 65,
-    visualColor: '#fff9e6',
+    visualColor: getMaterialColor('isolamento'),
   },
   {
     id: 'lã-rocg-50mm',
@@ -135,7 +140,7 @@ export const materials: Material[] = [
     thickness: 50,
     thermalR: 1.2,
     costPerM2: 45,
-    visualColor: '#ffe0b2',
+    visualColor: getMaterialColor('isolamento'),
   },
   
   // ===== REVESTIMENTO INTERNO =====
@@ -147,7 +152,7 @@ export const materials: Material[] = [
     thickness: 15,
     thermalR: 0.15,
     costPerM2: 95,
-    visualColor: '#d4a574', // Marrom claro (madeira)
+    visualColor: getMaterialColor('revestimento-interno'),
   },
   {
     id: 'maderite-6mm',
@@ -157,7 +162,7 @@ export const materials: Material[] = [
     thickness: 6,
     thermalR: 0.06,
     costPerM2: 45,
-    visualColor: '#e8c5a0', // Bege claro
+    visualColor: getMaterialColor('revestimento-interno'),
   },
   {
     id: 'mdf-12mm',
@@ -167,7 +172,7 @@ export const materials: Material[] = [
     thickness: 12,
     thermalR: 0.12,
     costPerM2: 55,
-    visualColor: '#deb887', // Burlywood
+    visualColor: getMaterialColor('revestimento-interno'),
   },
   {
     id: 'pvc-espumado-5mm',
@@ -177,7 +182,7 @@ export const materials: Material[] = [
     thickness: 5,
     thermalR: 0.08,
     costPerM2: 65,
-    visualColor: '#f5f5dc', // Bege
+    visualColor: getMaterialColor('revestimento-interno'),
   },
 ];
 
@@ -205,7 +210,8 @@ export function calculateMaterialWeight(material: Material, areaM2: number): num
   }
   
   // Se density é kg/m³ (materiais volumétricos)
-  const thicknessM = (material.thickness || 0.05) / 1000; // mm para m
+  // Usar constante MM_TO_M de shared/const.ts
+  const thicknessM = (material.thickness || 0.05) / MM_TO_M; // mm para m
   const volumeM3 = areaM2 * thicknessM;
   return material.density * volumeM3;
 }

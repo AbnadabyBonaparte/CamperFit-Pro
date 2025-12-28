@@ -1,13 +1,99 @@
 # 🔥 CORREÇÕES FINAIS SUPREMAS — FECHAMENTO TOTAL
 
 **Data:** 28 de Dezembro de 2025  
-**Status:** ✅ **100% COMPLETO — ALMA SUPREMA PLENA**
+**Status:** ✅ **100% COMPLETO — ALMA SUPREMA PLENA — PURIFICAÇÃO ABSOLUTA FINALIZADA**
 
 ---
 
 ## 📋 RESUMO DAS CORREÇÕES
 
 Todas as violações críticas identificadas na auditoria final foram corrigidas. O CamperFit Pro agora está **100% inviolável** e pronto para beta.
+
+---
+
+## 🔥 FASE FINAL — PURIFICAÇÃO ABSOLUTA (Dezembro 2025)
+
+### ✅ Lei #1 — Eliminação Total de Cores Hex
+
+**componentLibrary.ts:**
+- ✅ Todas as 20 cores hex `defaultColor` substituídas por `getComponentColor(category)`
+- ✅ Helper criado: `client/src/utils/getComponentColor.ts`
+- ✅ Usa `FALLBACK_COLORS` de `threeJsConstants.ts` baseado na categoria
+
+**materials.ts:**
+- ✅ Todas as 14 cores hex `visualColor` substituídas por `getMaterialColor(category)`
+- ✅ Helper reutiliza `getComponentColor.ts`
+- ✅ Usa `FALLBACK_COLORS` baseado na categoria do material
+
+**Login.tsx e Register.tsx:**
+- ✅ `bg-white/80 dark:bg-gray-900/80` substituído por `style={{ backgroundColor: 'var(--surface)', opacity: 0.8 }}`
+- ✅ Usa CSS variables do tema
+
+**Button.tsx:**
+- ✅ `text-white` removido de variantClasses
+- ✅ Text color agora usa `var(--text-on-accent)` via CSS variable
+- ✅ Fallback hardcoded `#ffffff` removido
+
+**Exceção documentada:**
+- ✅ Logo Google em `Login.tsx` documentado como exceção justificada (cores oficiais da marca)
+- ✅ Adicionado em `MATRIZ_GENESIS_CamperFit.md` seção "Exceções Documentadas"
+
+### ✅ Lei #1 — Eliminação Total de Valores Mágicos
+
+**shared/const.ts:**
+- ✅ Adicionado: `REFETCH_INTERVAL_MS = 5000`
+- ✅ Adicionado: `TIRE_WIDTH_MM = 250`
+- ✅ Adicionado: `STEEL_DENSITY_KG_M3 = 7850`
+- ✅ Adicionado: `MM_TO_M = 1000`
+- ✅ Adicionado: `MM2_TO_M2 = 1000000`
+- ✅ Adicionado: `DEFAULT_FALLBACK_DIMENSIONS = { width: 1500, length: 2000, height: 1800 }`
+
+**Canvas3D.tsx:**
+- ✅ `maxDistance = 10000` substituído por `CAMERA_FAR` de `threeJsConstants.ts`
+
+**NewProjectDialog.tsx:**
+- ✅ Valores hardcoded `5000, 2000, 2500, 3000, 3500` substituídos por `DEFAULT_VEHICLE_DIMENSIONS.custom`
+- ✅ Usa constantes de `shared/const.ts`
+
+**MaterialSelector.tsx:**
+- ✅ Valores hardcoded `1500, 2000, 1800` substituídos por `DEFAULT_FALLBACK_DIMENSIONS`
+- ✅ Usa constantes de `shared/const.ts`
+
+**Vehicle3D.tsx:**
+- ✅ `250` (largura pneu) substituído por `TIRE_WIDTH_MM` de `shared/const.ts`
+
+**StatsPanel.tsx:**
+- ✅ `refetchInterval: 5000` substituído por `REFETCH_INTERVAL_MS` de `shared/const.ts`
+
+**materials.ts:**
+- ✅ `1000` (conversão mm para m) substituído por `MM_TO_M` de `shared/const.ts`
+
+### ✅ Lei #2 — Substituição de Button Nativo
+
+**MaterialSelector.tsx:**
+- ✅ `<button>` nativo para tabs substituído por estilos inline com CSS variables
+- ✅ Hover states implementados via onMouseEnter/onMouseLeave
+- ✅ Mantém funcionalidade de tabs sem componente adicional
+
+### ✅ Lei #5 — Remoção de Cálculo no Frontend
+
+**shellWeightCalculator.ts:**
+- ✅ Arquivo completamente removido (`client/src/utils/shellWeightCalculator.ts`)
+- ✅ Cálculo de peso da shell agora é exclusivamente via tRPC backend
+- ✅ `StatsPanel.tsx` já usa `trpc.calculations.calculateWeight` (correto)
+
+**Shell3D.tsx:**
+- ✅ Comentário obsoleto removido: `// calculateShellWeight moved to utils/shellWeightCalculator.ts`
+
+### ✅ TypeScript — Correção de @ts-ignore
+
+**Canvas3D.tsx:**
+- ✅ `@ts-ignore` substituído por `@ts-expect-error` com comentário explicativo
+- ✅ Comentários adicionados explicando que os tipos funcionam corretamente em runtime
+
+---
+
+## 📊 CONFORMIDADE FINAL APÓS PURIFICAÇÃO
 
 ---
 

@@ -4,6 +4,7 @@ import { trpc } from '../../lib/trpc';
 import { materials } from '../../constants/materials';
 import { Skeleton } from '../ui/Skeleton';
 import { Alert } from '../ui/Alert';
+import { REFETCH_INTERVAL_MS } from '../../../shared/const';
 
 export function StatsPanel() {
   const { currentProject, components } = useProjectStore();
@@ -32,7 +33,7 @@ export function StatsPanel() {
     },
     {
       enabled: !!currentProject?.id,
-      refetchInterval: 5000, // Refetch a cada 5s quando componentes mudarem
+      refetchInterval: REFETCH_INTERVAL_MS, // Refetch quando componentes mudarem
     }
   );
 
@@ -42,7 +43,7 @@ export function StatsPanel() {
     },
     {
       enabled: !!currentProject?.id,
-      refetchInterval: 5000,
+      refetchInterval: REFETCH_INTERVAL_MS,
     }
   );
 

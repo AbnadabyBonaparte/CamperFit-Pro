@@ -3,6 +3,7 @@ import * as THREE from 'three';
 import { Vehicle, getVehicleById, defaultVehicle } from '../../constants/vehicles';
 import { FALLBACK_COLORS } from '../../../shared/consts/threeJsConstants';
 import { getThemeColorForThree } from '../../utils/getThemeColorForThree';
+import { TIRE_WIDTH_MM } from '../../../shared/const';
 
 interface Vehicle3DProps {
   vehicleId?: string;
@@ -88,7 +89,7 @@ export function Vehicle3D({ vehicleId, scene }: Vehicle3DProps) {
       const wheelGeometry = new THREE.CylinderGeometry(
         vehicle.tireDiameter / 2,
         vehicle.tireDiameter / 2,
-        250, // Largura do pneu
+        TIRE_WIDTH_MM, // Largura do pneu (constante de shared/const.ts)
         16
       );
       const wheel = new THREE.Mesh(wheelGeometry, wheelMaterial);

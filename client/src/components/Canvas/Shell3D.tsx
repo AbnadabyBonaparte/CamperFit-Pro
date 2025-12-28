@@ -387,5 +387,3 @@ function calculateClearance(vehicle: Vehicle, params: ShellParams): number {
   return cabineBackX - alcoveFrontX;
 }
 
-// calculateShellWeight moved to utils/shellWeightCalculator.ts
-

@@ -6,6 +6,7 @@ import { Card, CardContent } from '../ui/Card';
 import { Badge } from '../ui/Badge';
 import { Skeleton } from '../ui/Skeleton';
 import { Alert } from '../ui/Alert';
+import { DEFAULT_FALLBACK_DIMENSIONS } from '../../../shared/const';
 
 const categories: MaterialCategory[] = ['estrutura', 'revestimento-externo', 'isolamento', 'revestimento-interno'];
 
@@ -48,9 +49,9 @@ export function MaterialSelector() {
     };
 
     const shellParams = currentProject.shellParams || {
-      outerWidth: currentProject.width || 1500,
-      floorLength: currentProject.length || 2000,
-      interiorHeight: currentProject.height || 1800,
+      outerWidth: currentProject.width || DEFAULT_FALLBACK_DIMENSIONS.width,
+      floorLength: currentProject.length || DEFAULT_FALLBACK_DIMENSIONS.length,
+      interiorHeight: currentProject.height || DEFAULT_FALLBACK_DIMENSIONS.height,
       alcoveDepth: 400,
       alcoveAngle: 30,
       alcoveHeight: 600,
@@ -82,14 +83,21 @@ export function MaterialSelector() {
           <button
             key={category}
             onClick={() => setActiveTab(category)}
-            className={`px-3 py-2 text-xs font-medium transition-colors ${
-              activeTab === category
-                ? 'border-b-2'
-                : 'opacity-60 hover:opacity-100'
-            }`}
+            className="px-3 py-2 text-xs font-medium transition-colors"
             style={{
               color: activeTab === category ? 'var(--accent-1)' : 'var(--text-secondary)',
-              borderBottomColor: activeTab === category ? 'var(--accent-1)' : 'transparent',
+              borderBottom: activeTab === category ? '2px solid var(--accent-1)' : '2px solid transparent',
+              opacity: activeTab === category ? 1 : 0.6,
+            }}
+            onMouseEnter={(e) => {
+              if (activeTab !== category) {
+                e.currentTarget.style.opacity = '1';
+              }
+            }}
+            onMouseLeave={(e) => {
+              if (activeTab !== category) {
+                e.currentTarget.style.opacity = '0.6';
+              }
             }}
           >
             {categoryLabels[category]}
