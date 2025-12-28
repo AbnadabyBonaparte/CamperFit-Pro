@@ -29,7 +29,7 @@ export function Canvas3D({ width = 1200, height = 800 }: Canvas3DProps) {
   const animationFrameRef = useRef<number | null>(null);
   const [isFirstPerson, setIsFirstPerson] = useState(false);
 
-  const { components, selectComponent, selectedComponentId, currentProject } = useProjectStore();
+  const { components, selectComponent, selectedComponentId, currentProject, addComponent } = useProjectStore();
   const { showGrid, showShell, showVehicle } = useUIStore();
 
   // Initialize Three.js scene
@@ -134,8 +134,65 @@ export function Canvas3D({ width = 1200, height = 800 }: Canvas3DProps) {
       }
     };
 
+    // Drag and drop handler
+    const handleDragOver = (event: DragEvent) => {
+      event.preventDefault();
+      event.dataTransfer!.dropEffect = 'copy';
+    };
+
+    const handleDrop = (event: DragEvent) => {
+      event.preventDefault();
+      
+      const componentLibraryId = event.dataTransfer?.getData('component-library-id');
+      if (!componentLibraryId || !cameraRef.current || !containerRef.current) return;
+
+      // Import component library
+      import('../../constants/componentLibrary').then(({ getComponentById }) => {
+        const componentTemplate = getComponentById(componentLibraryId);
+        if (!componentTemplate) return;
+
+        const rect = containerRef.current!.getBoundingClientRect();
+        const x = ((event.clientX - rect.left) / width) * 2 - 1;
+        const y = -((event.clientY - rect.top) / height) * 2 + 1;
+
+        raycasterRef.current.setFromCamera(new THREE.Vector2(x, y), cameraRef.current!);
+        
+        // Intersectar com plano do chão
+        const plane = new THREE.Plane(new THREE.Vector3(0, 1, 0), 0);
+        const intersectionPoint = new THREE.Vector3();
+        raycasterRef.current.ray.intersectPlane(plane, intersectionPoint);
+        
+        if (intersectionPoint) {
+          // Snap to grid (50mm)
+          const gridSize = 50;
+          intersectionPoint.x = Math.round(intersectionPoint.x / gridSize) * gridSize;
+          intersectionPoint.y = intersectionPoint.y; // Keep Y as is (will be adjusted by component height)
+          intersectionPoint.z = Math.round(intersectionPoint.z / gridSize) * gridSize;
+
+          const newComponent = {
+            id: `comp-${Date.now()}-${Math.random().toString(36).substr(2, 9)}`,
+            componentLibraryId: componentLibraryId,
+            position: {
+              x: intersectionPoint.x,
+              y: intersectionPoint.z, // Z -> Y (canvas coordinate system)
+              z: intersectionPoint.y + componentTemplate.dimensions.height / 2, // Y -> Z with height offset
+            },
+            rotation: { x: 0, y: 0, z: 0 },
+            dimensions: componentTemplate.dimensions,
+            weight: componentTemplate.weight,
+            color: componentTemplate.defaultColor,
+            material: componentTemplate.properties?.material,
+          };
+
+          addComponent(newComponent);
+        }
+      });
+    };
+
     containerRef.current.addEventListener('mousemove', handleMouseMove);
     containerRef.current.addEventListener('click', handleClick);
+    containerRef.current.addEventListener('dragover', handleDragOver);
+    containerRef.current.addEventListener('drop', handleDrop);
 
     // Animation loop
     const animate = () => {
@@ -160,6 +217,8 @@ export function Canvas3D({ width = 1200, height = 800 }: Canvas3DProps) {
       }
       containerRef.current?.removeEventListener('mousemove', handleMouseMove);
       containerRef.current?.removeEventListener('click', handleClick);
+      containerRef.current?.removeEventListener('dragover', handleDragOver);
+      containerRef.current?.removeEventListener('drop', handleDrop);
       
       // Dispose geometries and materials
       scene.traverse((object) => {
@@ -176,7 +235,7 @@ export function Canvas3D({ width = 1200, height = 800 }: Canvas3DProps) {
       renderer.dispose();
       containerRef.current?.removeChild(renderer.domElement);
     };
-  }, [width, height, showGrid, isFirstPerson, selectComponent]);
+  }, [width, height, showGrid, isFirstPerson, selectComponent, addComponent]);
 
   // Update grid visibility
   useEffect(() => {

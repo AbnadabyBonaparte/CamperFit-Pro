@@ -4,20 +4,30 @@ import { PropertyPanel } from '../components/PropertyPanel/PropertyPanel';
 import { CanvasControls } from '../components/Canvas/Controls';
 import { VehicleSelector } from '../components/Editor/VehicleSelector';
 import { MaterialSelector } from '../components/Editor/MaterialSelector';
+import { ComponentLibraryPanel } from '../components/Editor/ComponentLibraryPanel';
+import { StatsPanel } from '../components/Editor/StatsPanel';
+import { useKeyboardShortcuts } from '../hooks/useKeyboardShortcuts';
 import { useUIStore } from '../stores/uiStore';
 
 export function Editor() {
   const { propertyPanelOpen, canvasMode, componentLibraryOpen } = useUIStore();
+  
+  // Keyboard shortcuts (Undo/Redo)
+  useKeyboardShortcuts();
 
   return (
     <div className="flex h-screen bg-gray-100">
-      {/* Sidebar Left */}
+      {/* Sidebar Left - Vehicle & Materials */}
       <div className="w-64 bg-white border-r border-gray-200 flex flex-col">
         <VehicleSelector />
+        <StatsPanel />
         <div className="flex-1 overflow-y-auto">
           <MaterialSelector />
         </div>
       </div>
+
+      {/* Component Library Sidebar */}
+      {componentLibraryOpen && <ComponentLibraryPanel />}
 
       {/* Main Canvas Area */}
       <div className="flex-1 flex flex-col">
