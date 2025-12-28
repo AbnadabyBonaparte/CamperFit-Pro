@@ -1,18 +1,26 @@
+import { Canvas2D } from '../components/Canvas/Canvas2D';
+import { PropertyPanel } from '../components/PropertyPanel/PropertyPanel';
+import { CanvasControls } from '../components/Canvas/Controls';
+import { useUIStore } from '../stores/uiStore';
+
 export function Editor() {
+  const { propertyPanelOpen } = useUIStore();
+
   return (
-    <div className="min-h-screen bg-gray-50">
-      <div className="h-screen flex flex-col">
-        <header className="bg-white border-b border-gray-200 px-6 py-4">
-          <h1 className="text-2xl font-bold text-gray-900">
-            Editor - Em desenvolvimento
-          </h1>
-        </header>
-        <main className="flex-1 overflow-auto">
-          <div className="p-6">
-            <p className="text-gray-600">Canvas e componentes em desenvolvimento</p>
-          </div>
-        </main>
+    <div className="flex h-screen bg-gray-100">
+      {/* Main Canvas Area */}
+      <div className="flex-1 flex flex-col">
+        {/* Toolbar */}
+        <CanvasControls />
+
+        {/* Canvas */}
+        <div className="flex-1 p-4 overflow-auto">
+          <Canvas2D width={1200} height={800} />
+        </div>
       </div>
+
+      {/* Property Panel */}
+      {propertyPanelOpen && <PropertyPanel />}
     </div>
   );
 }
