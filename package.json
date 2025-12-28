@@ -1,0 +1,41 @@
+{
+  "name": "camperfit-pro",
+  "version": "1.0.0",
+  "description": "CamperFit Pro - Plataforma de Engenharia de Motorhomes",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "dev": "concurrently \"npm run dev:client\" \"npm run dev:server\"",
+    "dev:client": "cd client && npm run dev",
+    "dev:server": "cd server && npm run dev",
+    "build": "npm run build:client && npm run build:server",
+    "build:client": "cd client && npm run build",
+    "build:server": "cd server && npm run build",
+    "db:generate": "cd server && drizzle-kit generate",
+    "db:migrate": "cd server && drizzle-kit migrate",
+    "db:studio": "cd server && drizzle-kit studio",
+    "typecheck": "tsc --noEmit",
+    "lint": "eslint . --ext .ts,.tsx",
+    "test": "vitest"
+  },
+  "keywords": [
+    "motorhome",
+    "camper",
+    "engineering",
+    "design",
+    "3d",
+    "calculations"
+  ],
+  "author": "CamperFit Pro Team",
+  "license": "MIT",
+  "devDependencies": {
+    "@types/node": "^20.10.0",
+    "@typescript-eslint/eslint-plugin": "^6.13.0",
+    "@typescript-eslint/parser": "^6.13.0",
+    "concurrently": "^8.2.2",
+    "eslint": "^8.54.0",
+    "typescript": "^5.3.3",
+    "vitest": "^1.0.0"
+  }
+}
+
