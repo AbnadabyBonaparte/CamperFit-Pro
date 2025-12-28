@@ -1,0 +1,105 @@
+# CamperFit Pro - Regras para Cursor AI
+
+Siga rigorosamente as **7 Leis Sagradas Invariáveis** da Matriz Gênesis.
+
+## 📋 REGRAS FUNDAMENTAIS
+
+### Lei #1: Zero Hardcoded
+- NUNCA use cores hex diretas (`#3b82f6`, `bg-blue-500`)
+- NUNCA use valores mágicos (`width: 1200`, `height: 800`)
+- SEMPRE use Tailwind classes ou CSS variables de `themes.ts`
+- SEMPRE use constantes de `shared/const.ts`
+
+### Lei #2: Componentes shadcn/ui ou Canvas3D
+- SEMPRE use shadcn/ui para componentes UI básicos
+- SEMPRE use Canvas3D/Shell3D/Vehicle3D para visualização 3D
+- NUNCA crie button/input/select do zero
+
+### Lei #3: Dados 100% tRPC
+- NUNCA use dados mockados
+- SEMPRE use TanStack Query + tRPC para dados do backend
+- SEMPRE implemente: loading, error, empty, success
+
+### Lei #4: Estados UI Completos
+- SEMPRE implemente todos os estados (loading, error, empty, success)
+- SEMPRE mostre feedback visual apropriado
+
+### Lei #5: Cálculos no Backend
+- NUNCA calcule CG, peso, payload no frontend
+- SEMPRE chame calculadoras backend via tRPC
+
+### Lei #6: Estrutura Canônica
+- Mantenha: `client/`, `server/`, `shared/`, `drizzle/`
+- NUNCA crie pastas fora desta estrutura
+- Coloque código compartilhado em `shared/`
+
+### Lei #7: Liberdade Total
+- SEMPRE permita seleção de qualquer veículo/material
+- NUNCA force valores default sem opção de mudança
+
+## 🎨 TEMAS E ESTILOS
+
+- Use temas de `client/src/constants/themes.ts`
+- Aplique via ThemeProvider
+- Consulte `docs/THEME_HIERARCHY.md` para hierarquia
+
+## 📁 ESTRUTURA DE ARQUIVOS
+
+```
+client/src/
+├── components/      # Componentes React
+│   ├── Canvas/     # Canvas3D, Shell3D, Vehicle3D
+│   ├── Editor/     # Componentes do editor
+│   ├── Theme/      # ThemeProvider, ThemeSelector
+│   └── Auth/       # ProtectedRoute
+├── constants/      # Bibliotecas (vehicles, materials, themes)
+├── hooks/          # Custom hooks (useProject, useCalculations)
+├── pages/          # Páginas (Dashboard, Editor, Login, etc)
+├── stores/         # Zustand stores
+└── lib/            # Utilitários (trpc, supabase)
+
+server/
+├── routers/        # Routers tRPC
+├── calculators/    # Calculadoras (CG, elétrica, gás)
+├── exporters/      # Exportadores (PDF, JSON, DXF, PNG)
+└── _core/          # Setup (trpc, auth, context)
+
+shared/
+├── types.ts        # Types TypeScript compartilhados
+├── const.ts        # Constantes compartilhadas
+└── validators.ts   # Validadores Zod
+```
+
+## ⚠️ VALIDAÇÕES OBRIGATÓRIAS
+
+Antes de sugerir código:
+1. Verificar se usa temas (não cores hardcoded)
+2. Verificar se usa shadcn/ui quando aplicável
+3. Verificar se dados vêm de tRPC (não mocks)
+4. Verificar se todos os estados UI estão implementados
+5. Verificar se cálculos críticos estão no backend
+6. Verificar se estrutura de pastas está correta
+7. Verificar se usuário tem liberdade de escolha
+
+## 🔍 CHECKLIST DE CÓDIGO
+
+Ao criar/modificar código:
+- [ ] Sem cores hex hardcoded
+- [ ] Sem valores mágicos
+- [ ] Componentes usando shadcn/ui ou Canvas3D
+- [ ] Dados via tRPC (não mocks)
+- [ ] Estados UI completos (loading, error, empty, success)
+- [ ] Cálculos críticos no backend
+- [ ] Estrutura de pastas canônica
+- [ ] Liberdade de seleção garantida
+
+## 📚 REFERÊNCIAS
+
+- `MATRIZ_GENESIS_CamperFit.md` - As 7 Leis Sagradas
+- `docs/THEME_HIERARCHY.md` - Hierarquia de temas
+- `BLUEPRINT_TECNICO_CamperFit_Pro.md` - Arquitetura técnica
+
+---
+
+**LEMBRE-SE:** Não existe "depois eu arrumo". Existe CERTO ou ERRADO.
+

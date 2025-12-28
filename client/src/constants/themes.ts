@@ -2,7 +2,7 @@
  * Temas visuais para CamperFit Pro
  */
 
-export type ThemeName = 'daylight' | 'expedition' | 'blueprint' | 'raiz';
+export type ThemeName = 'daylight' | 'expedition' | 'blueprint' | 'raiz' | 'forest';
 
 export interface Theme {
   name: ThemeName;
@@ -89,6 +89,23 @@ export const themes: Record<ThemeName, Theme> = {
       success: '#16a34a',
       warning: '#ca8a04',
       error: '#dc2626',
+    },
+  },
+  forest: {
+    name: 'forest',
+    displayName: 'Forest',
+    colors: {
+      primary: '#059669', // Emerald-600
+      secondary: '#0891b2', // Cyan-600
+      background: '#f0fdf4', // Green-50
+      surface: '#dcfce7', // Green-100
+      text: '#064e3b', // Emerald-900
+      textSecondary: '#10b981', // Emerald-500
+      border: '#86efac', // Green-300
+      accent: '#10b981', // Emerald-500
+      success: '#059669', // Emerald-600
+      warning: '#d97706', // Amber-600
+      error: '#dc2626', // Red-600
     },
   },
 };

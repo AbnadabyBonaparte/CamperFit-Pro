@@ -14,7 +14,7 @@ interface UIState {
   calculationsPanelOpen: boolean;
 
   // View settings
-  theme: 'daylight' | 'expedition' | 'blueprint' | 'raiz';
+  theme: 'daylight' | 'expedition' | 'blueprint' | 'raiz' | 'forest';
   showShell: boolean;
   showVehicle: boolean;
 
@@ -27,7 +27,7 @@ interface UIState {
   togglePropertyPanel: () => void;
   toggleComponentLibrary: () => void;
   toggleCalculationsPanel: () => void;
-  setTheme: (theme: 'daylight' | 'expedition' | 'blueprint' | 'raiz') => void;
+  setTheme: (theme: 'daylight' | 'expedition' | 'blueprint' | 'raiz' | 'forest') => void;
   setShowShell: (show: boolean) => void;
   setShowVehicle: (show: boolean) => void;
 }
