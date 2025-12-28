@@ -436,7 +436,7 @@ export function Canvas3D({ width = CANVAS_DEFAULT_WIDTH, height = CANVAS_DEFAULT
           {isFirstPerson ? 'Exit First-Person' : 'First-Person'}
         </Button>
         {isFirstPerson && (
-          <div className="text-xs p-2 rounded" style={{ backgroundColor: 'rgba(0, 0, 0, 0.5)', color: 'var(--text-primary)' }}>
+          <div className="text-xs p-2 rounded" style={{ backgroundColor: 'var(--overlay-background, rgba(0, 0, 0, 0.5))', color: 'var(--text-primary)' }}>
             WASD: Move | Mouse: Look | ESC: Exit
           </div>
         )}

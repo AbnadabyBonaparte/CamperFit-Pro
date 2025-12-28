@@ -5,6 +5,7 @@ import { Button } from '../components/ui/Button';
 import { Card, CardContent, CardHeader, CardTitle } from '../components/ui/Card';
 import { Alert } from '../components/ui/Alert';
 import { Input } from '../components/ui/Input';
+import { Skeleton } from '../components/ui/Skeleton';
 
 export function Register() {
   const [email, setEmail] = useState('');
@@ -49,7 +50,15 @@ export function Register() {
 
   return (
     <div className="min-h-screen flex items-center justify-center px-4" style={{ backgroundColor: 'var(--bg)' }}>
-      <Card className="max-w-md w-full">
+      <Card className="max-w-md w-full relative">
+        {loading && (
+          <div className="absolute inset-0 bg-white/80 dark:bg-gray-900/80 flex items-center justify-center z-10 rounded-lg">
+            <div className="flex flex-col gap-2 items-center">
+              <Skeleton className="h-4 w-32" />
+              <Skeleton className="h-10 w-48" />
+            </div>
+          </div>
+        )}
         <CardHeader>
           <CardTitle className="text-center text-2xl">Criar Conta</CardTitle>
         </CardHeader>

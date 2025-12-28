@@ -47,6 +47,9 @@ export function ThemeProvider({ children }: ThemeProviderProps) {
     root.style.setProperty('--text-secondary', currentTheme.colors.textSecondary);
     root.style.setProperty('--accent-1', currentTheme.colors.primary);
     root.style.setProperty('--accent-2', currentTheme.colors.secondary);
+    
+    // Overlay background (semi-transparent black for modals/dialogs)
+    root.style.setProperty('--overlay-background', 'rgba(0, 0, 0, 0.5)');
   }, [currentTheme]);
 
   return (

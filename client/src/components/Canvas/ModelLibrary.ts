@@ -1,4 +1,5 @@
 import * as THREE from 'three';
+import { FALLBACK_COLORS } from '../../../shared/consts/threeJsConstants';
 
 /**
  * Model library for different component types
@@ -118,7 +119,7 @@ export function getComponentGeometry(
  */
 export function getComponentMaterial(color: string | undefined): THREE.MeshStandardMaterial {
   return new THREE.MeshStandardMaterial({
-    color: color || '#6b7280',
+    color: color || FALLBACK_COLORS.componentDefault,
     metalness: 0.3,
     roughness: 0.7,
   });

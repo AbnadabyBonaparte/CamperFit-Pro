@@ -1,7 +1,7 @@
 # 📊 Progresso Completo - CamperFit Pro
 
 **Data:** 28 de Dezembro de 2025  
-**Última Atualização:** Agora (Após Correção Final Suprema)  
+**Última Atualização:** Agora (Após Correção Final Suprema - Fechamento Total)  
 **Status:** ✅ **100% – ALMA SUPREMA PLENA — PRONTO PARA BETA**
 
 ---
@@ -131,7 +131,32 @@ O CamperFit Pro possui **governança canônica completa** baseada em **7 Leis Sa
 
 ---
 
-## ⚡ CORREÇÕES SUPREMAS APLICADAS
+## ⚡ CORREÇÕES SUPREMAS APLICADAS - FECHAMENTO TOTAL
+
+### ✅ Correções Finais Aplicadas (Dezembro 2025)
+
+**Lei #1 - Zero Hardcoded:**
+- ✅ Shell3D.tsx: clearanceColor agora usa getThemeColorForThree com fallbacks de threeJsConstants.ts
+- ✅ Dialog.tsx e Canvas3D.tsx: rgba(0,0,0,0.5) substituído por var(--overlay-background)
+- ✅ ThemeProvider: --overlay-background adicionado como CSS variable
+- ✅ ModelLibrary.ts: cor padrão agora usa FALLBACK_COLORS.componentDefault
+- ✅ threeJsConstants.ts: cores success, warning, error, overlayBackground adicionadas
+- ✅ Login.tsx: cores hex do logo Google documentadas como exceção justificada
+
+**Lei #3 - Dados 100% tRPC:**
+- ✅ Router tRPC criado: catalogs.listComponents, catalogs.listMaterials, catalogs.listVehicles
+- ✅ VehicleSelector.tsx: migrado para usar trpc.catalogs.listVehicles.useQuery
+- ✅ MaterialSelector.tsx: migrado para usar trpc.catalogs.listMaterials.useQuery
+- ✅ ComponentLibraryPanel.tsx: migrado para usar trpc.catalogs.listComponents.useQuery
+- ✅ Todos os seletores agora têm estados completos (loading, error, empty, success)
+
+**Lei #4 - Estados UI Completos:**
+- ✅ Login.tsx: loading visual adicionado (Skeleton overlay durante autenticação)
+- ✅ Register.tsx: loading visual adicionado (Skeleton overlay durante registro)
+- ✅ Todos os seletores (Vehicle, Material, Component) têm estados completos
+
+**Documentação:**
+- ✅ Exceção do logo Google documentada em Login.tsx com comentário justificativo
 
 ### ✅ Violações Corrigidas (Lei #1 - Zero Hardcoded)
 
@@ -206,6 +231,10 @@ O CamperFit Pro possui **governança canônica completa** baseada em **7 Leis Sa
 - ✅ Valores mágicos movidos para shared/const.ts
 - ✅ Canvas2D/3D usando CSS variables quando possível
 - ✅ Three.js materials usando cores documentadas (necessário hex para Three.js)
+- ✅ Shell3D.tsx: clearanceColor usando getThemeColorForThree com fallbacks
+- ✅ Dialog.tsx e Canvas3D.tsx: rgba substituído por var(--overlay-background)
+- ✅ ModelLibrary.ts: usando FALLBACK_COLORS.componentDefault
+- ✅ Exceção do logo Google documentada e justificada
 
 ### ✅ Lei #2: Componentes shadcn/ui - **100% CONFORME**
 - ✅ 9 componentes UI criados (Button, Card, Alert, Skeleton, Input, Select, Textarea, Dialog, Badge)
@@ -219,6 +248,11 @@ O CamperFit Pro possui **governança canônica completa** baseada em **7 Leis Sa
 - ✅ Nenhum dado mockado em produção
 - ✅ TanStack Query em uso
 - ✅ Hooks tRPC implementados
+- ✅ Router catalogs criado (listComponents, listMaterials, listVehicles)
+- ✅ VehicleSelector usando trpc.catalogs.listVehicles.useQuery
+- ✅ MaterialSelector usando trpc.catalogs.listMaterials.useQuery
+- ✅ ComponentLibraryPanel usando trpc.catalogs.listComponents.useQuery
+- ✅ Todos os catálogos agora vêm do backend via tRPC
 
 ### ✅ Lei #4: Estados UI Completos - **100% CONFORME**
 - ✅ Loading: Skeleton components em todas as páginas
@@ -226,6 +260,11 @@ O CamperFit Pro possui **governança canônica completa** baseada em **7 Leis Sa
 - ✅ Empty: Mensagens + CTAs em todas as páginas
 - ✅ Success: Conteúdo renderizado
 - ✅ Editor.tsx com estados completos (loading, error, empty, success)
+- ✅ Login.tsx: loading visual com Skeleton overlay
+- ✅ Register.tsx: loading visual com Skeleton overlay
+- ✅ VehicleSelector: estados completos (loading, error, empty, success)
+- ✅ MaterialSelector: estados completos (loading, error, empty, success)
+- ✅ ComponentLibraryPanel: estados completos (loading, error, empty, success)
 
 ### ✅ Lei #5: Cálculos no Backend - **100% CONFORME**
 - ✅ Cálculos críticos (CG, peso) no backend

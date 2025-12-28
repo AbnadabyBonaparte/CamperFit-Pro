@@ -1,8 +1,11 @@
 import { useState } from 'react';
 import { useProjectStore } from '../../stores/projectStore';
-import { materials, getMaterialsByCategory, MaterialCategory } from '../../constants/materials';
+import { trpc } from '../../lib/trpc';
+import { MaterialCategory } from '../../constants/materials';
 import { Card, CardContent } from '../ui/Card';
 import { Badge } from '../ui/Badge';
+import { Skeleton } from '../ui/Skeleton';
+import { Alert } from '../ui/Alert';
 
 const categories: MaterialCategory[] = ['estrutura', 'revestimento-externo', 'isolamento', 'revestimento-interno'];
 
@@ -17,7 +20,9 @@ export function MaterialSelector() {
   const { currentProject, setCurrentProject } = useProjectStore();
   const [activeTab, setActiveTab] = useState<MaterialCategory>('estrutura');
 
-  const categoryMaterials = getMaterialsByCategory(activeTab);
+  const { data: materials, isLoading, error } = trpc.catalogs.listMaterials.useQuery({
+    category: activeTab,
+  });
   
   const getSelectedMaterialId = (category: MaterialCategory): string | undefined => {
     if (!currentProject?.shellParams) return undefined;
@@ -93,8 +98,28 @@ export function MaterialSelector() {
       </div>
 
       {/* Material List */}
-      <div className="space-y-2">
-        {categoryMaterials.map((material) => {
+      {isLoading && (
+        <div className="space-y-2">
+          <Skeleton className="h-16 w-full" />
+          <Skeleton className="h-16 w-full" />
+        </div>
+      )}
+
+      {error && (
+        <Alert variant="error" className="text-xs">
+          Erro ao carregar materiais.
+        </Alert>
+      )}
+
+      {!isLoading && !error && (!materials || materials.length === 0) && (
+        <div className="text-xs text-center py-4" style={{ color: 'var(--text-secondary)' }}>
+          Nenhum material disponível nesta categoria.
+        </div>
+      )}
+
+      {!isLoading && !error && materials && materials.length > 0 && (
+        <div className="space-y-2">
+          {materials.map((material) => {
           const selectedMaterialId = getSelectedMaterialId(activeTab);
           return (
             <Card
@@ -124,7 +149,8 @@ export function MaterialSelector() {
             </Card>
           );
         })}
-      </div>
+        </div>
+      )}
     </div>
   );
 }

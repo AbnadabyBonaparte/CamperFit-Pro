@@ -1,10 +1,13 @@
 import { useState } from 'react';
 import { useUIStore } from '../../stores/uiStore';
-import { componentLibrary, ComponentCategory } from '../../constants/componentLibrary';
+import { trpc } from '../../lib/trpc';
+import { ComponentCategory } from '../../constants/componentLibrary';
 import { Button } from '../ui/Button';
 import { Input } from '../ui/Input';
 import { Card, CardContent } from '../ui/Card';
 import { Badge } from '../ui/Badge';
+import { Skeleton } from '../ui/Skeleton';
+import { Alert } from '../ui/Alert';
 
 const categories: ComponentCategory[] = ['sleeping', 'kitchen', 'storage', 'electrical', 'plumbing', 'furniture'];
 
@@ -13,13 +16,16 @@ export function ComponentLibraryPanel() {
   const [searchQuery, setSearchQuery] = useState('');
   const [selectedCategory, setSelectedCategory] = useState<ComponentCategory | 'all'>('all');
 
+  const { data: components, isLoading, error } = trpc.catalogs.listComponents.useQuery({
+    category: selectedCategory === 'all' ? undefined : selectedCategory,
+  });
+
   if (!componentLibraryOpen) return null;
 
-  const filteredComponents = componentLibrary.filter((component) => {
+  const filteredComponents = (components || []).filter((component) => {
     const matchesSearch = component.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
       component.description?.toLowerCase().includes(searchQuery.toLowerCase());
-    const matchesCategory = selectedCategory === 'all' || component.category === selectedCategory;
-    return matchesSearch && matchesCategory;
+    return matchesSearch;
   });
 
   const handleDragStart = (e: React.DragEvent, componentId: string) => {
@@ -81,12 +87,29 @@ export function ComponentLibraryPanel() {
 
       {/* Component List */}
       <div className="flex-1 overflow-y-auto p-4 space-y-2">
-        {filteredComponents.length === 0 ? (
-          <div className="text-center py-8" style={{ color: 'var(--text-secondary)' }}>
-            Nenhum componente encontrado
+        {isLoading && (
+          <div className="space-y-2">
+            <Skeleton className="h-20 w-full" />
+            <Skeleton className="h-20 w-full" />
+            <Skeleton className="h-20 w-full" />
           </div>
-        ) : (
-          filteredComponents.map((component) => (
+        )}
+
+        {error && (
+          <Alert variant="error" className="text-xs">
+            Erro ao carregar componentes.
+          </Alert>
+        )}
+
+        {!isLoading && !error && filteredComponents.length === 0 && (
+          <div className="text-center py-8" style={{ color: 'var(--text-secondary)' }}>
+            {searchQuery ? 'Nenhum componente encontrado' : 'Nenhum componente disponível'}
+          </div>
+        )}
+
+        {!isLoading && !error && filteredComponents.length > 0 && (
+          <>
+            {filteredComponents.map((component) => (
             <Card
               key={component.id}
               draggable
@@ -122,7 +145,8 @@ export function ComponentLibraryPanel() {
                 </div>
               </CardContent>
             </Card>
-          ))
+          ))}
+          </>
         )}
       </div>
     </div>

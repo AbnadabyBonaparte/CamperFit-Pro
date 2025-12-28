@@ -283,12 +283,17 @@ export function Shell3D({ vehicleId, params, scene }: Shell3DProps) {
     if (params.alcoveDepth > 0) {
       const clearanceDistance = calculateClearance(vehicle, params);
       // Cores de clearance baseadas em status (usar cores do tema: success, warning, error)
-      // Three.js requer hex, então usamos valores hex equivalentes às cores do tema
-      const clearanceColor = clearanceDistance >= 100 
-        ? '#10b981' // success (emerald-500)
-        : clearanceDistance >= 50 
-        ? '#f59e0b' // warning (amber-500)
-        : '#ef4444'; // error (red-500)
+      // Three.js requer hex, então usamos getThemeColorForThree com fallbacks
+      const getClearanceColorHex = (distance: number): number => {
+        if (distance >= 100) {
+          return getThemeColorForThree('--color-success', FALLBACK_COLORS.success);
+        }
+        if (distance >= 50) {
+          return getThemeColorForThree('--color-warning', FALLBACK_COLORS.warning);
+        }
+        return getThemeColorForThree('--color-error', FALLBACK_COLORS.error);
+      };
+      const clearanceColor = new THREE.Color(getClearanceColorHex(clearanceDistance));
       
       const clearanceGeometry = new THREE.PlaneGeometry(mainBodyWidth, params.alcoveHeight);
       const clearanceMaterial = new THREE.MeshStandardMaterial({

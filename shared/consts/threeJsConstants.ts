@@ -33,4 +33,8 @@ export const FALLBACK_COLORS = {
   vehicleBody: '#2c3e50',
   wheel: '#1a1a1a',
   chassis: '#34495e',
+  success: '#10b981',
+  warning: '#f59e0b',
+  error: '#ef4444',
+  overlayBackground: 'rgba(0, 0, 0, 0.5)',
 };

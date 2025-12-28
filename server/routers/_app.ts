@@ -4,6 +4,7 @@ import { componentsRouter } from './components';
 import { calculationsRouter } from './calculations';
 import { exportRouter } from './export';
 import { marketplaceRouter } from './marketplace';
+import { catalogsRouter } from './catalogs';
 
 export const appRouter = router({
   projects: projectsRouter,
@@ -11,6 +12,7 @@ export const appRouter = router({
   calculations: calculationsRouter,
   export: exportRouter,
   marketplace: marketplaceRouter,
+  catalogs: catalogsRouter,
 });
 
 export type AppRouter = typeof appRouter;
