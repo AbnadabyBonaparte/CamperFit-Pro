@@ -1,6 +1,29 @@
+import { useEffect, useState } from 'react';
 import { Card, CardContent, CardHeader, CardTitle } from '../components/ui/Card';
+import { Skeleton } from '../components/ui/Skeleton';
+import { Alert } from '../components/ui/Alert';
+import { Button } from '../components/ui/Button';
 
 export function Marketplace() {
+  const [isLoading, setIsLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
+
+  useEffect(() => {
+    const timer = setTimeout(() => {
+      setIsLoading(false);
+    }, 600);
+
+    return () => clearTimeout(timer);
+  }, []);
+
+  const handleRetry = () => {
+    setError(null);
+    setIsLoading(true);
+    setTimeout(() => {
+      setIsLoading(false);
+    }, 600);
+  };
+
   return (
     <div className="min-h-screen p-6" style={{ backgroundColor: 'var(--bg)' }}>
       <Card>
@@ -8,9 +31,36 @@ export function Marketplace() {
           <CardTitle>Marketplace</CardTitle>
         </CardHeader>
         <CardContent>
-          <div style={{ color: 'var(--text-secondary)' }}>
-            Marketplace em desenvolvimento.
-          </div>
+          {isLoading && (
+            <div className="space-y-4">
+              <Skeleton className="h-4 w-48" />
+              <Skeleton className="h-12 w-full" />
+              <Skeleton className="h-12 w-full" />
+            </div>
+          )}
+
+          {error && (
+            <Alert variant="error" className="flex items-center justify-between">
+              <span>Erro ao carregar o marketplace. Tente novamente.</span>
+              <Button size="sm" variant="ghost" onClick={handleRetry}>
+                Tentar de novo
+              </Button>
+            </Alert>
+          )}
+
+          {!isLoading && !error && (
+            <Card className="border-dashed" style={{ backgroundColor: 'var(--surface)' }}>
+              <CardContent className="py-8 text-center space-y-2">
+                <div style={{ color: 'var(--text-primary)' }}>
+                  Nenhum item disponível ainda.
+                </div>
+                <div style={{ color: 'var(--text-secondary)' }}>
+                  A área de marketplace está em desenvolvimento.
+                </div>
+                <Button size="sm">Em desenvolvimento</Button>
+              </CardContent>
+            </Card>
+          )}
         </CardContent>
       </Card>
     </div>

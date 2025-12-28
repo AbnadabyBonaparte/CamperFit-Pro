@@ -39,7 +39,7 @@ export interface ComponentLibraryItem {
     voltage?: number; // V para elétricos
     power?: number; // W para elétricos
     material?: string;
-    [key: string]: any;
+    [key: string]: string | number | boolean | undefined;
   };
 }
 

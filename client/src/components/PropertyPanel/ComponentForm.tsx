@@ -2,6 +2,8 @@ import { useState, useEffect } from 'react';
 import { useProjectStore } from '../../stores/projectStore';
 import { Input } from '../ui/Input';
 import { Button } from '../ui/Button';
+import { ColorInput } from '../ui/ColorInput';
+import { FALLBACK_COLORS } from '../../../shared/consts/threeJsConstants';
 
 interface Component {
   id: string;
@@ -25,7 +27,7 @@ export function ComponentForm({ component }: ComponentFormProps) {
   const [weight, setWeight] = useState(component.weight || 0);
   const [material, setMaterial] = useState(component.material || '');
   // Default color (neutral gray - matches theme text-secondary)
-  const defaultColor = '#6b7280';
+  const defaultColor = FALLBACK_COLORS.componentDefault;
   const [color, setColor] = useState(component.color || defaultColor);
 
   useEffect(() => {
@@ -169,15 +171,12 @@ export function ComponentForm({ component }: ComponentFormProps) {
           Cor
         </label>
         <div className="flex gap-2">
-          <input
-            type="color"
+          <ColorInput
             value={color}
             onChange={(e) => {
               setColor(e.target.value);
               handleUpdate({ color: e.target.value });
             }}
-            className="w-12 h-8 rounded cursor-pointer border"
-            style={{ borderColor: 'var(--color-border)' }}
           />
           <Input
             type="text"

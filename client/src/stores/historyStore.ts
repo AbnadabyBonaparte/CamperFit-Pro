@@ -3,17 +3,30 @@
  * Mantém histórico de ações para undo/redo
  */
 
-export type HistoryAction = 
-  | { type: 'add_component'; componentId: string; component: any }
-  | { type: 'remove_component'; componentId: string; component: any }
-  | { type: 'update_component'; componentId: string; oldValue: any; newValue: any }
-  | { type: 'move_component'; componentId: string; oldPosition: any; newPosition: any }
-  | { type: 'rotate_component'; componentId: string; oldRotation: any; newRotation: any }
+type Vector3Snapshot = { x: number; y: number; z: number };
+type ComponentSnapshot = {
+  id: string;
+  componentLibraryId?: string;
+  position?: Vector3Snapshot;
+  rotation?: Vector3Snapshot;
+  dimensions?: { length: number; width: number; height: number };
+  weight?: number;
+  material?: string;
+  color?: string;
+  selected?: boolean;
+};
+
+export type HistoryAction =
+  | { type: 'add_component'; componentId: string; component: ComponentSnapshot }
+  | { type: 'remove_component'; componentId: string; component: ComponentSnapshot }
+  | { type: 'update_component'; componentId: string; oldValue: ComponentSnapshot; newValue: ComponentSnapshot }
+  | { type: 'move_component'; componentId: string; oldPosition: Vector3Snapshot; newPosition: Vector3Snapshot }
+  | { type: 'rotate_component'; componentId: string; oldRotation: Vector3Snapshot; newRotation: Vector3Snapshot }
   | { type: 'batch'; actions: HistoryAction[] };
 
 export interface HistoryState {
   past: HistoryAction[];
-  present: any; // Estado atual
+  present: ComponentSnapshot[] | null; // Estado atual
   future: HistoryAction[];
   maxHistorySize: number;
 }
@@ -29,7 +42,7 @@ class HistoryStore {
   /**
    * Adicionar ação ao histórico
    */
-  push(action: HistoryAction, presentState: any) {
+  push(action: HistoryAction, presentState: ComponentSnapshot[] | null) {
     // Limpar futuro quando uma nova ação é feita
     this.state.future = [];
     
