@@ -2,6 +2,11 @@
 
 **Plataforma SaaS de Engenharia para Design, Validação e Homologação de Motorhomes e Campers**
 
+[![Status](https://img.shields.io/badge/status-MVP%20Complete-success)]()
+[![License](https://img.shields.io/badge/license-MIT-blue)]()
+
+---
+
 ## 📋 Visão Geral
 
 CamperFit Pro é a primeira plataforma integrada no Brasil que combina:
@@ -11,15 +16,20 @@ CamperFit Pro é a primeira plataforma integrada no Brasil que combina:
 - 📊 Otimização de materiais
 - 🛒 Marketplace de componentes
 
+**Status:** MVP Completo - Pronto para Beta 🎯
+
+---
+
 ## 🚀 Stack Tecnológica
 
 ### Frontend
 - **React 19** + TypeScript
-- **Tailwind CSS 4** + shadcn/ui
+- **Tailwind CSS 4** + Temas customizáveis
 - **Three.js** (visualização 3D)
 - **Zustand** (state management)
 - **TanStack Query** (data fetching)
 - **tRPC** (type-safe APIs)
+- **Supabase** (autenticação)
 
 ### Backend
 - **Node.js 22** + Express 4
@@ -29,38 +39,65 @@ CamperFit Pro é a primeira plataforma integrada no Brasil que combina:
 - **PDFKit** (PDF generation)
 - **dxf-writer** (DXF export)
 
+---
+
 ## 🏗️ Estrutura do Projeto
 
 ```
 camperfit-pro/
 ├── client/          # Frontend React
+│   ├── src/
+│   │   ├── components/
+│   │   │   ├── Canvas/      # Canvas 2D/3D
+│   │   │   ├── Editor/      # Componentes do editor
+│   │   │   └── Theme/       # Temas visuais
+│   │   ├── constants/       # Bibliotecas (veículos, materiais, componentes)
+│   │   ├── hooks/           # Custom hooks
+│   │   ├── pages/           # Páginas
+│   │   └── stores/          # Zustand stores
+│   └── package.json
 ├── server/          # Backend Express + tRPC
+│   ├── routers/     # Routers tRPC
+│   ├── calculators/ # Calculadoras (CG, elétrica, gás)
+│   └── exporters/   # Exportadores (PDF, JSON, DXF, PNG)
 ├── shared/          # Código compartilhado
 ├── drizzle/         # Database schema & migrations
-└── storage/         # S3 configuration
+└── README.md
 ```
 
-## 🛠️ Desenvolvimento
+---
+
+## 🛠️ Instalação e Setup
 
 ### Pré-requisitos
+
 - Node.js 22+
 - MySQL 8.0+ ou TiDB
-- AWS S3 (ou compatível)
+- Supabase account (para autenticação)
+- AWS S3 (ou compatível, opcional para MVP)
 
-### Instalação
+### 1. Instalar Dependências
 
 ```bash
-# Instalar dependências
+# Instalar dependências do monorepo
 npm install
 
-# Instalar dependências do client e server
+# Instalar dependências do client
 cd client && npm install
+
+# Instalar dependências do server
 cd ../server && npm install
 ```
 
-### Variáveis de Ambiente
+### 2. Configurar Variáveis de Ambiente
 
-Crie arquivos `.env` no `client/` e `server/`:
+**client/.env:**
+```env
+VITE_API_URL="http://localhost:3001"
+VITE_TRPC_URL="http://localhost:3001/api/trpc"
+VITE_SUPABASE_URL="your-supabase-url"
+VITE_SUPABASE_ANON_KEY="your-supabase-anon-key"
+```
 
 **server/.env:**
 ```env
@@ -71,53 +108,128 @@ S3_REGION="us-east-1"
 AWS_ACCESS_KEY_ID="your-key"
 AWS_SECRET_ACCESS_KEY="your-secret"
 PORT=3001
+CORS_ORIGIN="http://localhost:5173"
 ```
 
-**client/.env:**
-```env
-VITE_API_URL="http://localhost:3001"
-VITE_TRPC_URL="http://localhost:3001/api/trpc"
+### 3. Setup Supabase
+
+1. Crie um projeto no [Supabase](https://supabase.com)
+2. Copie a URL e Anon Key para `client/.env`
+3. Configure Authentication providers (Email, Google OAuth)
+
+### 4. Setup Database
+
+```bash
+# Executar migrations
+cd server
+npm run db:push  # ou db:migrate conforme configuração Drizzle
 ```
 
-### Executar
+### 5. Executar
 
 ```bash
 # Desenvolvimento (client + server)
 npm run dev
 
 # Apenas client
-npm run dev:client
+cd client && npm run dev
 
 # Apenas server
-npm run dev:server
+cd server && npm run dev
 ```
-
-### Banco de Dados
-
-```bash
-# Gerar migrações
-npm run db:generate
-
-# Aplicar migrações
-npm run db:migrate
-
-# Abrir Drizzle Studio
-npm run db:studio
-```
-
-## 📚 Documentação
-
-Consulte os documentos no repositório:
-- `BLUEPRINT_TECNICO_CamperFit_Pro.md` - Arquitetura técnica completa
-- `CamperFit Pro — Product Requirements Document (1000_1000).md` - PRD completo
-- `EXEMPLOS_JSON_CamperFit_Pro.md` - Exemplos de dados
-- `WIREFRAMES_UX_FLOWS.md` - Design e UX
-
-## 📝 Licença
-
-MIT
 
 ---
 
-**Desenvolvido com ❤️ para a comunidade de motorhomes brasileira**
+## 🎨 Funcionalidades Principais
 
+### ✅ MVP Completo
+
+- **Editor 3D Completo**
+  - Visualização 3D com Three.js
+  - Drag-and-drop de componentes
+  - Undo/Redo (50 níveis)
+  - Seleção e edição de propriedades
+
+- **Biblioteca de Componentes**
+  - 20 componentes essenciais
+  - Dormitório, Cozinha, Armazenamento, Elétrica, Hidráulica, Mobiliário
+  - Filtros e busca
+
+- **Veículos e Materiais**
+  - 8 veículos brasileiros (Mahindra, Toyota, Ford, etc.)
+  - 16 materiais catalogados
+  - Shell paramétrica 3D
+
+- **Cálculos em Tempo Real**
+  - Peso total (componentes + shell)
+  - Centro de Gravidade (X, Y, Z)
+  - Payload usado/disponível
+  - Validações automáticas
+
+- **Autenticação**
+  - Login/Registro com email/senha
+  - Login com Google OAuth
+  - Proteção de rotas
+  - Sessão persistente
+
+- **Temas Visuais**
+  - Daylight (claro)
+  - Expedition (dark)
+  - Blueprint (técnico azul)
+  - Raiz (verde/madeira)
+
+---
+
+## 📊 Roadmap Fase 2
+
+### Marketplace (3 meses)
+- 1000+ componentes catalogados
+- Filtros avançados
+- Preços e fornecedores reais
+- Integração com catálogos
+
+### Export Completo (2 meses)
+- DXF otimizado para CNC
+- PDF técnico completo
+- PNG em alta resolução
+- JSON estruturado
+
+### Conformidade Regulatória (3 meses)
+- Validação CONTRAN automatizada
+- NBR 5410 (elétrica)
+- NBR 15264 (gás)
+- Relatórios de conformidade
+
+### Templates e Comunidade (2 meses)
+- 50+ templates de projetos
+- Galeria pública
+- Compartilhamento de projetos
+- Comunidade de builders
+
+---
+
+## 📸 Screenshots
+
+_Adicionar screenshots do MVP aqui_
+
+---
+
+## 🤝 Contribuindo
+
+Contribuições são bem-vindas! Por favor, abra uma issue antes de fazer grandes mudanças.
+
+---
+
+## 📄 Licença
+
+MIT License - veja LICENSE para detalhes
+
+---
+
+## 🙏 Agradecimentos
+
+Desenvolvido com ❤️ para a comunidade de builders de campers no Brasil 🇧🇷
+
+---
+
+**Status:** ✅ MVP Completo - Pronto para Beta

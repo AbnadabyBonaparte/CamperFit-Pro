@@ -14,7 +14,7 @@ interface UIState {
   calculationsPanelOpen: boolean;
 
   // View settings
-  theme: 'light' | 'dark';
+  theme: 'daylight' | 'expedition' | 'blueprint' | 'raiz';
   showShell: boolean;
   showVehicle: boolean;
 
@@ -27,7 +27,7 @@ interface UIState {
   togglePropertyPanel: () => void;
   toggleComponentLibrary: () => void;
   toggleCalculationsPanel: () => void;
-  setTheme: (theme: 'light' | 'dark') => void;
+  setTheme: (theme: 'daylight' | 'expedition' | 'blueprint' | 'raiz') => void;
   setShowShell: (show: boolean) => void;
   setShowVehicle: (show: boolean) => void;
 }
@@ -46,7 +46,7 @@ export const useUIStore = create<UIState>((set) => ({
   calculationsPanelOpen: false,
 
   // Theme
-  theme: 'light',
+  theme: 'daylight',
   
   // Shell & Vehicle
   showShell: true,

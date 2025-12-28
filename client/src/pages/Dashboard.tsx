@@ -1,8 +1,9 @@
 import { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
+import { supabase } from '../lib/supabase';
 import { useProjects, useCreateProject, useDeleteProject, useDuplicateProject } from '../hooks/useProject';
 import { ProjectCard } from '../components/Dashboard/ProjectCard';
 import { NewProjectDialog } from '../components/Dashboard/NewProjectDialog';
-import { useNavigate } from 'react-router-dom';
 
 export function Dashboard() {
   const [showNewProjectDialog, setShowNewProjectDialog] = useState(false);
@@ -53,11 +54,19 @@ export function Dashboard() {
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4">
           <div className="flex items-center justify-between">
             <h1 className="text-2xl font-bold text-gray-900">CamperFit Pro</h1>
-            <nav className="flex gap-4">
+            <nav className="flex gap-4 items-center">
               <a href="/marketplace" className="text-gray-600 hover:text-gray-900">
                 Marketplace
               </a>
-              <button className="text-gray-600 hover:text-gray-900">👤</button>
+              <button
+                onClick={async () => {
+                  await supabase.auth.signOut();
+                  window.location.href = '/login';
+                }}
+                className="text-gray-600 hover:text-gray-900"
+              >
+                Sair
+              </button>
             </nav>
           </div>
         </div>

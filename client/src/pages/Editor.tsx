@@ -6,6 +6,7 @@ import { VehicleSelector } from '../components/Editor/VehicleSelector';
 import { MaterialSelector } from '../components/Editor/MaterialSelector';
 import { ComponentLibraryPanel } from '../components/Editor/ComponentLibraryPanel';
 import { StatsPanel } from '../components/Editor/StatsPanel';
+import { ThemeSelector } from '../components/Theme/ThemeSelector';
 import { useKeyboardShortcuts } from '../hooks/useKeyboardShortcuts';
 import { useUIStore } from '../stores/uiStore';
 
@@ -19,6 +20,7 @@ export function Editor() {
     <div className="flex h-screen bg-gray-100">
       {/* Sidebar Left - Vehicle & Materials */}
       <div className="w-64 bg-white border-r border-gray-200 flex flex-col">
+        <ThemeSelector />
         <VehicleSelector />
         <StatsPanel />
         <div className="flex-1 overflow-y-auto">
