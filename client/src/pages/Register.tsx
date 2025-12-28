@@ -39,8 +39,8 @@ export function Register() {
       if (error) throw error;
 
       navigate('/dashboard');
-    } catch (err: any) {
-      setError(err.message || 'Erro ao criar conta');
+    } catch (err) {
+      setError(err instanceof Error ? err.message : 'Erro ao criar conta');
     } finally {
       setLoading(false);
     }

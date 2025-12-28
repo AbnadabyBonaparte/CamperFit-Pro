@@ -1,4 +1,5 @@
 import { useUIStore } from '../../stores/uiStore';
+import { Button } from '../ui/Button';
 
 export function CanvasControls() {
   const {
@@ -10,89 +11,78 @@ export function CanvasControls() {
     setZoom,
     propertyPanelOpen,
     togglePropertyPanel,
+    componentLibraryOpen,
+    toggleComponentLibrary,
   } = useUIStore();
 
   return (
-    <div className="bg-white border-b border-gray-300 px-4 py-2 flex items-center justify-between">
+    <div className="px-4 py-2 flex items-center justify-between border-b" style={{ backgroundColor: 'var(--surface)', borderColor: 'var(--color-border)' }}>
       <div className="flex items-center gap-4">
         {/* Mode Toggle */}
         <div className="flex gap-2">
-          <button
+          <Button
+            variant={canvasMode === '2d' ? 'primary' : 'ghost'}
+            size="sm"
             onClick={() => setCanvasMode('2d')}
-            className={`px-3 py-1 rounded text-sm ${
-              canvasMode === '2d'
-                ? 'bg-blue-600 text-white'
-                : 'bg-gray-200 text-gray-700 hover:bg-gray-300'
-            }`}
           >
             2D
-          </button>
-          <button
+          </Button>
+          <Button
+            variant={canvasMode === '3d' ? 'primary' : 'ghost'}
+            size="sm"
             onClick={() => setCanvasMode('3d')}
-            className={`px-3 py-1 rounded text-sm ${
-              canvasMode === '3d'
-                ? 'bg-blue-600 text-white'
-                : 'bg-gray-200 text-gray-700 hover:bg-gray-300'
-            }`}
           >
             3D
-          </button>
+          </Button>
         </div>
 
         {/* Grid Toggle */}
-        <button
+        <Button
+          variant={showGrid ? 'primary' : 'ghost'}
+          size="sm"
           onClick={toggleGrid}
-          className={`px-3 py-1 rounded text-sm ${
-            showGrid
-              ? 'bg-green-600 text-white'
-              : 'bg-gray-200 text-gray-700 hover:bg-gray-300'
-          }`}
         >
           {showGrid ? 'Grid: ON' : 'Grid: OFF'}
-        </button>
+        </Button>
 
         {/* Zoom */}
         <div className="flex items-center gap-2">
-          <button
+          <Button
+            variant="ghost"
+            size="sm"
             onClick={() => setZoom(zoom * 0.9)}
-            className="px-2 py-1 bg-gray-200 rounded text-sm hover:bg-gray-300"
           >
             −
-          </button>
-          <span className="text-sm text-gray-700 w-16 text-center">
+          </Button>
+          <span className="text-sm w-16 text-center" style={{ color: 'var(--text-secondary)' }}>
             {Math.round(zoom * 100)}%
           </span>
-          <button
+          <Button
+            variant="ghost"
+            size="sm"
             onClick={() => setZoom(zoom * 1.1)}
-            className="px-2 py-1 bg-gray-200 rounded text-sm hover:bg-gray-300"
           >
             +
-          </button>
+          </Button>
         </div>
       </div>
 
       {/* Right Side Controls */}
       <div className="flex items-center gap-2">
-        <button
+        <Button
+          variant={componentLibraryOpen ? 'primary' : 'ghost'}
+          size="sm"
           onClick={toggleComponentLibrary}
-          className={`px-3 py-1 rounded text-sm ${
-            componentLibraryOpen
-              ? 'bg-blue-600 text-white'
-              : 'bg-gray-200 text-gray-700 hover:bg-gray-300'
-          }`}
         >
           Biblioteca
-        </button>
-        <button
+        </Button>
+        <Button
+          variant={propertyPanelOpen ? 'primary' : 'ghost'}
+          size="sm"
           onClick={togglePropertyPanel}
-          className={`px-3 py-1 rounded text-sm ${
-            propertyPanelOpen
-              ? 'bg-blue-600 text-white'
-              : 'bg-gray-200 text-gray-700 hover:bg-gray-300'
-          }`}
         >
           Propriedades
-        </button>
+        </Button>
       </div>
     </div>
   );

@@ -18,15 +18,15 @@ export function Dashboard() {
   const duplicateProject = useDuplicateProject();
   const navigate = useNavigate();
 
-  const handleCreateProject = async (data: any) => {
+  const handleCreateProject = async (data: { name: string; description?: string; vehicleId?: string }) => {
     try {
       const result = await createProject.mutateAsync(data);
       if (result?.id) {
         navigate(`/editor/${result.id}`);
       }
     } catch (err) {
-      console.error('Error creating project:', err);
-      // TODO: Use toast/alert component
+      // Error is handled by tRPC error handling
+      // Could add toast notification here if needed
     }
   };
 
@@ -34,8 +34,7 @@ export function Dashboard() {
     try {
       await deleteProject.mutateAsync(id);
     } catch (err) {
-      console.error('Error deleting project:', err);
-      // TODO: Use toast/alert component
+      // Error is handled by tRPC error handling
     }
   };
 
@@ -47,8 +46,7 @@ export function Dashboard() {
         // navigate(`/editor/${result.id}`);
       }
     } catch (err) {
-      console.error('Error duplicating project:', err);
-      // TODO: Use toast/alert component
+      // Error is handled by tRPC error handling
     }
   };
 
@@ -114,7 +112,7 @@ export function Dashboard() {
             <Card>
               <CardContent className="p-4">
                 <div className="text-2xl font-bold" style={{ color: 'var(--text-primary)' }}>
-                  {projects?.filter((p: any) => p.status === 'completed').length || 0}
+                  {projects?.filter((p) => p.status === 'completed').length || 0}
                 </div>
                 <div className="text-sm" style={{ color: 'var(--text-secondary)' }}>
                   Completos
@@ -124,7 +122,7 @@ export function Dashboard() {
             <Card>
               <CardContent className="p-4">
                 <div className="text-2xl font-bold" style={{ color: 'var(--text-primary)' }}>
-                  {projects?.filter((p: any) => p.status === 'in_progress').length || 0}
+                  {projects?.filter((p) => p.status === 'in_progress').length || 0}
                 </div>
                 <div className="text-sm" style={{ color: 'var(--text-secondary)' }}>
                   Em Progresso
@@ -166,7 +164,7 @@ export function Dashboard() {
               </Card>
             ) : (
               <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-                {projects.map((project: any) => (
+                {projects.map((project) => (
                   <ProjectCard
                     key={project.id}
                     project={project}

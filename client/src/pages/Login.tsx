@@ -26,8 +26,8 @@ export function Login() {
       if (error) throw error;
 
       navigate('/dashboard');
-    } catch (err: any) {
-      setError(err.message || 'Erro ao fazer login');
+    } catch (err) {
+      setError(err instanceof Error ? err.message : 'Erro ao fazer login');
     } finally {
       setLoading(false);
     }
@@ -46,8 +46,8 @@ export function Login() {
       });
 
       if (error) throw error;
-    } catch (err: any) {
-      setError(err.message || 'Erro ao fazer login com Google');
+    } catch (err) {
+      setError(err instanceof Error ? err.message : 'Erro ao fazer login com Google');
       setLoading(false);
     }
   };

@@ -100,9 +100,10 @@ export function Shell3D({ vehicleId, params, scene }: Shell3DProps) {
     const shellGroup = new THREE.Group();
     meshGroupRef.current = shellGroup;
 
-    // Cores dos materiais
-    const externalColor = externalMaterial?.visualColor || '#c0c0c0';
-    const structureColor = structureMaterial?.visualColor || '#8b8b8b';
+    // Cores dos materiais (Three.js requer hex)
+    // Usar visualColor do material ou cor padrão neutra
+    const externalColor = externalMaterial?.visualColor || '#c0c0c0'; // Prateado padrão
+    const structureColor = structureMaterial?.visualColor || '#8b8b8b'; // Cinza metálico padrão
 
     // === CORPO PRINCIPAL ===
     const mainBodyLength = params.floorLength;
@@ -274,7 +275,13 @@ export function Shell3D({ vehicleId, params, scene }: Shell3DProps) {
     // === CLEARANCE PLANE (verde/âmbar entre alcova e cabine) ===
     if (params.alcoveDepth > 0) {
       const clearanceDistance = calculateClearance(vehicle, params);
-      const clearanceColor = clearanceDistance >= 100 ? '#00ff00' : clearanceDistance >= 50 ? '#ffaa00' : '#ff0000';
+      // Cores de clearance baseadas em status (usar cores do tema: success, warning, error)
+      // Three.js requer hex, então usamos valores hex equivalentes às cores do tema
+      const clearanceColor = clearanceDistance >= 100 
+        ? '#10b981' // success (emerald-500)
+        : clearanceDistance >= 50 
+        ? '#f59e0b' // warning (amber-500)
+        : '#ef4444'; // error (red-500)
       
       const clearanceGeometry = new THREE.PlaneGeometry(mainBodyWidth, params.alcoveHeight);
       const clearanceMaterial = new THREE.MeshStandardMaterial({

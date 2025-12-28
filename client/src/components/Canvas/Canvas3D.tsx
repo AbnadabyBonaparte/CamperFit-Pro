@@ -10,13 +10,15 @@ import { getComponentGeometry, getComponentMaterial } from './ModelLibrary';
 import { Shell3D } from './Shell3D';
 import { Vehicle3D } from './Vehicle3D';
 import { defaultVehicle } from '../../constants/vehicles';
+import { Button } from '../ui/Button';
+import { CANVAS_DEFAULT_WIDTH, CANVAS_DEFAULT_HEIGHT } from '../../../shared/const';
 
 interface Canvas3DProps {
   width?: number;
   height?: number;
 }
 
-export function Canvas3D({ width = 1200, height = 800 }: Canvas3DProps) {
+export function Canvas3D({ width = CANVAS_DEFAULT_WIDTH, height = CANVAS_DEFAULT_HEIGHT }: Canvas3DProps) {
   const containerRef = useRef<HTMLDivElement>(null);
   const sceneRef = useRef<THREE.Scene | null>(null);
   const cameraRef = useRef<THREE.PerspectiveCamera | null>(null);
@@ -275,7 +277,8 @@ export function Canvas3D({ width = 1200, height = 800 }: Canvas3DProps) {
 
       if (!mesh) {
         // Get geometry from model library based on component type
-        const componentType = (component as any).type || (component as any).componentType;
+        // Use componentLibraryId if available, otherwise use a default type
+        const componentType = component.componentLibraryId || 'box';
         const geometry = getComponentGeometry(componentType, {
           length: component.dimensions.length || 100,
           width: component.dimensions.width || 100,
@@ -310,16 +313,19 @@ export function Canvas3D({ width = 1200, height = 800 }: Canvas3DProps) {
       // For performance, we don't recreate geometry on every render
       // If dimensions change significantly, the component should be recreated
 
-      // Update color
+      // Update color (use component color or default from theme)
+      // Note: Three.js requires hex colors, so we use a default gray
       if (mesh.material instanceof THREE.MeshStandardMaterial) {
-        const newColor = component.color || '#6b7280';
+        const defaultColor = '#6b7280'; // Neutral gray (matches theme text-secondary)
+        const newColor = component.color || defaultColor;
         mesh.material.color.set(newColor);
       }
 
-      // Update selection highlight
+      // Update selection highlight (use primary color from theme)
+      // Note: Three.js requires hex, using primary color (0x3b82f6 = blue-500)
       const isSelected = component.id === selectedComponentId;
       if (mesh.material instanceof THREE.MeshStandardMaterial) {
-        mesh.material.emissive.setHex(isSelected ? 0x4444ff : 0x000000);
+        mesh.material.emissive.setHex(isSelected ? 0x3b82f6 : 0x000000);
         mesh.material.emissiveIntensity = isSelected ? 0.3 : 0;
       }
     });
@@ -400,18 +406,15 @@ export function Canvas3D({ width = 1200, height = 800 }: Canvas3DProps) {
       
       {/* Controls overlay */}
       <div className="absolute top-4 right-4 flex flex-col gap-2">
-        <button
+        <Button
+          variant={isFirstPerson ? 'primary' : 'ghost'}
+          size="sm"
           onClick={toggleFirstPerson}
-          className={`px-3 py-2 rounded text-sm ${
-            isFirstPerson
-              ? 'bg-blue-600 text-white'
-              : 'bg-white text-gray-700 border border-gray-300 hover:bg-gray-50'
-          }`}
         >
           {isFirstPerson ? 'Exit First-Person' : 'First-Person'}
-        </button>
+        </Button>
         {isFirstPerson && (
-          <div className="bg-black bg-opacity-50 text-white text-xs p-2 rounded">
+          <div className="text-xs p-2 rounded" style={{ backgroundColor: 'rgba(0, 0, 0, 0.5)', color: 'var(--text-primary)' }}>
             WASD: Move | Mouse: Look | ESC: Exit
           </div>
         )}

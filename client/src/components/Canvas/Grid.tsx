@@ -23,7 +23,7 @@ export function Grid({ width, height }: GridProps) {
         y1={0}
         x2={x - pan.x}
         y2={height}
-        stroke="#e5e7eb"
+        stroke="var(--color-border)"
         strokeWidth={1}
       />
     );
@@ -39,7 +39,7 @@ export function Grid({ width, height }: GridProps) {
         y1={y - pan.y}
         x2={width}
         y2={y - pan.y}
-        stroke="#e5e7eb"
+        stroke="var(--color-border)"
         strokeWidth={1}
       />
     );

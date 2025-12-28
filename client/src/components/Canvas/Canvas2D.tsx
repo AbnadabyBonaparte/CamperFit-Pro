@@ -1,13 +1,14 @@
 import { useEffect, useRef, useState, useCallback } from 'react';
 import { useProjectStore } from '../../stores/projectStore';
 import { useUIStore } from '../../stores/uiStore';
+import { CANVAS_DEFAULT_WIDTH, CANVAS_DEFAULT_HEIGHT } from '../../../shared/const';
 
 interface Canvas2DProps {
   width?: number;
   height?: number;
 }
 
-export function Canvas2D({ width = 800, height = 600 }: Canvas2DProps) {
+export function Canvas2D({ width = CANVAS_DEFAULT_WIDTH, height = CANVAS_DEFAULT_HEIGHT }: Canvas2DProps) {
   const canvasRef = useRef<HTMLCanvasElement>(null);
   const [isDragging, setIsDragging] = useState(false);
   const [dragStart, setDragStart] = useState({ x: 0, y: 0 });
@@ -21,7 +22,10 @@ export function Canvas2D({ width = 800, height = 600 }: Canvas2DProps) {
   const drawGrid = useCallback((ctx: CanvasRenderingContext2D, width: number, height: number) => {
     if (!showGrid) return;
 
-    ctx.strokeStyle = '#e5e7eb';
+    // Use CSS variable for grid color (convert to hex for canvas)
+    // Default to gray-200 (#e5e7eb) if CSS variable not available
+    const gridColor = getComputedStyle(document.documentElement).getPropertyValue('--color-border').trim() || '#e5e7eb';
+    ctx.strokeStyle = gridColor;
     ctx.lineWidth = 1;
 
     const startX = Math.floor(pan.x / (gridSize * zoom)) * gridSize * zoom;
@@ -51,15 +55,22 @@ export function Canvas2D({ width = 800, height = 600 }: Canvas2DProps) {
       const h = component.dimensions.width * zoom;
 
       // Draw component rectangle
-      ctx.fillStyle = component.selected ? '#3b82f6' : component.color || '#6b7280';
-      ctx.strokeStyle = component.selected ? '#1d4ed8' : '#374151';
+      // Use CSS variables for colors (convert to hex for canvas)
+      const primaryColor = getComputedStyle(document.documentElement).getPropertyValue('--color-primary').trim() || '#3b82f6';
+      const primaryDarkColor = getComputedStyle(document.documentElement).getPropertyValue('--color-primary').trim() || '#1d4ed8';
+      const textColor = getComputedStyle(document.documentElement).getPropertyValue('--color-text').trim() || '#374151';
+      const surfaceColor = getComputedStyle(document.documentElement).getPropertyValue('--color-surface').trim() || '#ffffff';
+      const defaultComponentColor = '#6b7280'; // Neutral gray
+      
+      ctx.fillStyle = component.selected ? primaryColor : component.color || defaultComponentColor;
+      ctx.strokeStyle = component.selected ? primaryDarkColor : textColor;
       ctx.lineWidth = component.selected ? 3 : 2;
 
       ctx.fillRect(x, y, w, h);
       ctx.strokeRect(x, y, w, h);
 
-      // Draw label
-      ctx.fillStyle = '#ffffff';
+      // Draw label (use surface color for text background)
+      ctx.fillStyle = surfaceColor;
       ctx.font = '12px sans-serif';
       ctx.textAlign = 'center';
       ctx.textBaseline = 'middle';
@@ -175,7 +186,7 @@ export function Canvas2D({ width = 800, height = 600 }: Canvas2DProps) {
   }, [zoom]);
 
   return (
-    <div className="relative w-full h-full bg-white border border-gray-300 rounded">
+    <div className="relative w-full h-full rounded border" style={{ backgroundColor: 'var(--surface)', borderColor: 'var(--color-border)' }}>
       <canvas
         ref={canvasRef}
         width={width}

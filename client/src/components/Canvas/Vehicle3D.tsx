@@ -35,9 +35,10 @@ export function Vehicle3D({ vehicleId, scene }: Vehicle3DProps) {
     const vehicleGroup = new THREE.Group();
     vehicleGroupRef.current = vehicleGroup;
 
-    // Material do veículo
+    // Material do veículo (Three.js requer hex)
+    // Usar cor neutra escura para veículo
     const vehicleMaterial = new THREE.MeshStandardMaterial({
-      color: '#2c3e50', // Azul escuro/cinza
+      color: '#2c3e50', // Azul escuro/cinza (cor padrão para veículos)
       metalness: 0.7,
       roughness: 0.3,
     });
@@ -67,8 +68,9 @@ export function Vehicle3D({ vehicleId, scene }: Vehicle3DProps) {
     vehicleGroup.add(bed);
 
     // === RODAS (simplificadas como cilindros) ===
+    // Three.js requer hex - usar preto padrão para rodas
     const wheelMaterial = new THREE.MeshStandardMaterial({
-      color: '#1a1a1a', // Preto
+      color: '#1a1a1a', // Preto (cor padrão para rodas)
       metalness: 0.1,
       roughness: 0.9,
     });
@@ -101,8 +103,9 @@ export function Vehicle3D({ vehicleId, scene }: Vehicle3DProps) {
       100, // Altura do chassi
       vehicle.totalWidth
     );
+    // Chassi (Three.js requer hex)
     const chassisMaterial = new THREE.MeshStandardMaterial({
-      color: '#34495e',
+      color: '#34495e', // Cinza metálico (cor padrão para chassi)
       metalness: 0.8,
       roughness: 0.2,
     });

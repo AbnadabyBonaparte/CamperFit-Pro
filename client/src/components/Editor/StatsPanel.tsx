@@ -1,60 +1,87 @@
 import { useProjectStore } from '../../stores/projectStore';
-import { calculateShellWeight } from '../../utils/shellWeightCalculator';
 import { getVehicleById, defaultVehicle } from '../../constants/vehicles';
-import { useMemo } from 'react';
+import { trpc } from '../../lib/trpc';
+import { materials } from '../../constants/materials';
+import { Skeleton } from '../ui/Skeleton';
+import { Alert } from '../ui/Alert';
 
 export function StatsPanel() {
   const { currentProject, components } = useProjectStore();
 
-  const stats = useMemo(() => {
-    if (!currentProject) return null;
-
-    const vehicle = currentProject.vehicleId
-      ? getVehicleById(currentProject.vehicleId)
-      : defaultVehicle;
-
-    // Peso dos componentes internos
-    const componentsWeight = components.reduce((sum, comp) => sum + (comp.weight || 0), 0);
-
-    // Peso da shell (se tiver params)
-    let shellWeight = 0;
-    if (currentProject.shellParams && vehicle) {
-      shellWeight = calculateShellWeight(currentProject.shellParams, vehicle);
+  // Buscar cálculos do backend
+  const { data: weightData, isLoading: weightLoading, error: weightError } = trpc.calculations.calculateWeight.useQuery(
+    {
+      projectId: currentProject?.id || '',
+      shellParams: currentProject?.shellParams ? {
+        floorLength: currentProject.shellParams.floorLength,
+        outerWidth: currentProject.shellParams.outerWidth,
+        interiorHeight: currentProject.shellParams.interiorHeight,
+        alcoveDepth: currentProject.shellParams.alcoveDepth,
+        alcoveHeight: currentProject.shellParams.alcoveHeight,
+        externalMaterialId: currentProject.shellParams.externalMaterialId,
+        internalMaterialId: currentProject.shellParams.internalMaterialId,
+        insulationMaterialId: currentProject.shellParams.insulationMaterialId,
+        showFrame: currentProject.shellParams.showFrame,
+        frameSize: currentProject.shellParams.frameSize,
+      } : null,
+      materials: materials.map(m => ({
+        id: m.id,
+        density: m.density,
+        thickness: m.thickness,
+      })),
+    },
+    {
+      enabled: !!currentProject?.id,
+      refetchInterval: 5000, // Refetch a cada 5s quando componentes mudarem
     }
+  );
 
-    const totalWeight = componentsWeight + shellWeight;
-    const payloadUsed = totalWeight;
-    const payloadAvailable = vehicle ? vehicle.payloadMax - payloadUsed : 0;
-    const payloadPercentage = vehicle ? (payloadUsed / vehicle.payloadMax) * 100 : 0;
+  const { data: cgData, isLoading: cgLoading, error: cgError } = trpc.calculations.calculateCG.useQuery(
+    {
+      projectId: currentProject?.id || '',
+    },
+    {
+      enabled: !!currentProject?.id,
+      refetchInterval: 5000,
+    }
+  );
 
-    // CG aproximado (simplificado - usar calculadora real depois)
-    const totalMomentX = components.reduce((sum, comp) => {
-      return sum + (comp.weight || 0) * (comp.position.x || 0);
-    }, 0);
-    const totalMomentY = components.reduce((sum, comp) => {
-      return sum + (comp.weight || 0) * (comp.position.y || 0);
-    }, 0);
-    const totalMomentZ = components.reduce((sum, comp) => {
-      return sum + (comp.weight || 0) * (comp.position.z || 0);
-    }, 0);
+  if (!currentProject) return null;
 
-    const cgX = totalWeight > 0 ? totalMomentX / totalWeight : 0;
-    const cgY = totalWeight > 0 ? totalMomentY / totalWeight : 0;
-    const cgZ = totalWeight > 0 ? totalMomentZ / totalWeight : 0;
+  const vehicle = currentProject.vehicleId
+    ? getVehicleById(currentProject.vehicleId)
+    : defaultVehicle;
 
-    return {
-      componentsWeight,
-      shellWeight,
-      totalWeight,
-      payloadUsed,
-      payloadAvailable,
-      payloadPercentage,
-      payloadMax: vehicle?.payloadMax || 0,
-      cgX,
-      cgY,
-      cgZ,
-    };
-  }, [currentProject, components]);
+  const isLoading = weightLoading || cgLoading;
+  const error = weightError || cgError;
+
+  if (isLoading) {
+    return (
+      <div className="p-4 border-b" style={{ backgroundColor: 'var(--surface)', borderColor: 'var(--color-border)' }}>
+        <Skeleton className="h-4 w-24 mb-3" />
+        <Skeleton className="h-4 w-full mb-2" />
+        <Skeleton className="h-4 w-full mb-2" />
+        <Skeleton className="h-4 w-full" />
+      </div>
+    );
+  }
+
+  if (error) {
+    return (
+      <div className="p-4 border-b" style={{ backgroundColor: 'var(--surface)', borderColor: 'var(--color-border)' }}>
+        <Alert variant="error" className="text-xs">
+          Erro ao calcular estatísticas. Tente novamente.
+        </Alert>
+      </div>
+    );
+  }
+
+  const stats = weightData ? {
+    ...weightData,
+    cgX: cgData?.cgX || 0,
+    cgY: cgData?.cgY || 0,
+    cgZ: cgData?.cgZ || 0,
+  } : null;
 
   if (!stats) return null;
 

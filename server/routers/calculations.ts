@@ -10,13 +10,66 @@ import { calculateElectrical } from '../calculators/electrical';
 import { calculateGas } from '../calculators/gas';
 import { calculateDeflection } from '../calculators/deflection';
 import { validateCompliance } from '../calculators/compliance';
+import { calculateWeight } from '../calculators/weight';
 import type { CGResult, ElectricalResult, GasResult, ComplianceResult } from '../../shared/types';
 
 export const calculationsRouter = router({
+  // Calcular peso total (componentes + shell)
+  calculateWeight: protectedProcedure
+    .input(z.object({
+      projectId: z.string().uuid(),
+      shellParams: z.object({
+        floorLength: z.number(),
+        outerWidth: z.number(),
+        interiorHeight: z.number(),
+        alcoveDepth: z.number(),
+        alcoveHeight: z.number(),
+        externalMaterialId: z.string().optional(),
+        internalMaterialId: z.string().optional(),
+        insulationMaterialId: z.string().optional(),
+        showFrame: z.boolean().optional(),
+        frameSize: z.enum(['50x50', '40x40', '30x30']).optional(),
+      }).nullable(),
+      materials: z.array(z.object({
+        id: z.string(),
+        density: z.number(),
+        thickness: z.number().optional(),
+      })),
+    }))
+    .query(async ({ ctx, input }) => {
+      // Verificar se o projeto pertence ao usuário
+      const projectResult = await db.select()
+        .from(projects)
+        .where(eq(projects.id, input.projectId))
+        .limit(1);
+      
+      const project = projectResult[0];
+      
+      if (!project || project.userId !== ctx.user.id) {
+        throw new TRPCError({ code: 'FORBIDDEN', message: 'Project not found or access denied' });
+      }
+
+      // Buscar componentes do projeto
+      const componentsResult = await db.select()
+        .from(projectComponents)
+        .where(eq(projectComponents.projectId, input.projectId));
+
+      // Calcular peso
+      const payloadMax = project.maxGVWR || 0;
+      const result = calculateWeight(
+        componentsResult,
+        input.shellParams,
+        payloadMax,
+        input.materials
+      );
+
+      return result;
+    }),
+
   // Calcular centro de gravidade
   calculateCG: protectedProcedure
     .input(z.object({ projectId: z.string().uuid() }))
-    .mutation(async ({ ctx, input }) => {
+    .query(async ({ ctx, input }) => {
       // Verificar se o projeto pertence ao usuário
       const projectResult = await db.select()
         .from(projects)

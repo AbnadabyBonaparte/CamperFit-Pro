@@ -1,5 +1,7 @@
 import { useState, useEffect } from 'react';
 import { useProjectStore } from '../../stores/projectStore';
+import { Input } from '../ui/Input';
+import { Button } from '../ui/Button';
 
 interface Component {
   id: string;
@@ -22,14 +24,16 @@ export function ComponentForm({ component }: ComponentFormProps) {
   const [dimensions, setDimensions] = useState(component.dimensions);
   const [weight, setWeight] = useState(component.weight || 0);
   const [material, setMaterial] = useState(component.material || '');
-  const [color, setColor] = useState(component.color || '#6b7280');
+  // Default color (neutral gray - matches theme text-secondary)
+  const defaultColor = '#6b7280';
+  const [color, setColor] = useState(component.color || defaultColor);
 
   useEffect(() => {
     setPosition(component.position);
     setDimensions(component.dimensions);
     setWeight(component.weight || 0);
     setMaterial(component.material || '');
-    setColor(component.color || '#6b7280');
+    setColor(component.color || defaultColor);
   }, [component]);
 
   const handleUpdate = (updates: Partial<Component>) => {
@@ -40,13 +44,13 @@ export function ComponentForm({ component }: ComponentFormProps) {
     <div className="space-y-4">
       {/* Position */}
       <div>
-        <label className="block text-sm font-medium text-gray-700 mb-2">
+        <label className="block text-sm font-medium mb-2" style={{ color: 'var(--text-primary)' }}>
           Posição (mm)
         </label>
         <div className="grid grid-cols-3 gap-2">
           <div>
-            <label className="block text-xs text-gray-500 mb-1">X</label>
-            <input
+            <label className="block text-xs mb-1" style={{ color: 'var(--text-secondary)' }}>X</label>
+            <Input
               type="number"
               value={position.x.toFixed(0)}
               onChange={(e) => {
@@ -54,12 +58,11 @@ export function ComponentForm({ component }: ComponentFormProps) {
                 setPosition(newPos);
                 handleUpdate({ position: newPos });
               }}
-              className="w-full px-2 py-1 border border-gray-300 rounded text-sm"
             />
           </div>
           <div>
-            <label className="block text-xs text-gray-500 mb-1">Y</label>
-            <input
+            <label className="block text-xs mb-1" style={{ color: 'var(--text-secondary)' }}>Y</label>
+            <Input
               type="number"
               value={position.y.toFixed(0)}
               onChange={(e) => {
@@ -67,12 +70,11 @@ export function ComponentForm({ component }: ComponentFormProps) {
                 setPosition(newPos);
                 handleUpdate({ position: newPos });
               }}
-              className="w-full px-2 py-1 border border-gray-300 rounded text-sm"
             />
           </div>
           <div>
-            <label className="block text-xs text-gray-500 mb-1">Z</label>
-            <input
+            <label className="block text-xs mb-1" style={{ color: 'var(--text-secondary)' }}>Z</label>
+            <Input
               type="number"
               value={position.z.toFixed(0)}
               onChange={(e) => {
@@ -80,7 +82,6 @@ export function ComponentForm({ component }: ComponentFormProps) {
                 setPosition(newPos);
                 handleUpdate({ position: newPos });
               }}
-              className="w-full px-2 py-1 border border-gray-300 rounded text-sm"
             />
           </div>
         </div>
@@ -88,13 +89,13 @@ export function ComponentForm({ component }: ComponentFormProps) {
 
       {/* Dimensions */}
       <div>
-        <label className="block text-sm font-medium text-gray-700 mb-2">
+        <label className="block text-sm font-medium mb-2" style={{ color: 'var(--text-primary)' }}>
           Dimensões (mm)
         </label>
         <div className="grid grid-cols-3 gap-2">
           <div>
-            <label className="block text-xs text-gray-500 mb-1">Comprimento</label>
-            <input
+            <label className="block text-xs mb-1" style={{ color: 'var(--text-secondary)' }}>Comprimento</label>
+            <Input
               type="number"
               value={dimensions.length.toFixed(0)}
               onChange={(e) => {
@@ -102,12 +103,11 @@ export function ComponentForm({ component }: ComponentFormProps) {
                 setDimensions(newDims);
                 handleUpdate({ dimensions: newDims });
               }}
-              className="w-full px-2 py-1 border border-gray-300 rounded text-sm"
             />
           </div>
           <div>
-            <label className="block text-xs text-gray-500 mb-1">Largura</label>
-            <input
+            <label className="block text-xs mb-1" style={{ color: 'var(--text-secondary)' }}>Largura</label>
+            <Input
               type="number"
               value={dimensions.width.toFixed(0)}
               onChange={(e) => {
@@ -115,12 +115,11 @@ export function ComponentForm({ component }: ComponentFormProps) {
                 setDimensions(newDims);
                 handleUpdate({ dimensions: newDims });
               }}
-              className="w-full px-2 py-1 border border-gray-300 rounded text-sm"
             />
           </div>
           <div>
-            <label className="block text-xs text-gray-500 mb-1">Altura</label>
-            <input
+            <label className="block text-xs mb-1" style={{ color: 'var(--text-secondary)' }}>Altura</label>
+            <Input
               type="number"
               value={dimensions.height.toFixed(0)}
               onChange={(e) => {
@@ -128,7 +127,6 @@ export function ComponentForm({ component }: ComponentFormProps) {
                 setDimensions(newDims);
                 handleUpdate({ dimensions: newDims });
               }}
-              className="w-full px-2 py-1 border border-gray-300 rounded text-sm"
             />
           </div>
         </div>
@@ -136,10 +134,10 @@ export function ComponentForm({ component }: ComponentFormProps) {
 
       {/* Weight */}
       <div>
-        <label className="block text-sm font-medium text-gray-700 mb-2">
+        <label className="block text-sm font-medium mb-2" style={{ color: 'var(--text-primary)' }}>
           Peso (kg)
         </label>
-        <input
+        <Input
           type="number"
           value={weight}
           onChange={(e) => {
@@ -147,29 +145,27 @@ export function ComponentForm({ component }: ComponentFormProps) {
             setWeight(newWeight);
             handleUpdate({ weight: newWeight });
           }}
-          className="w-full px-2 py-1 border border-gray-300 rounded text-sm"
         />
       </div>
 
       {/* Material */}
       <div>
-        <label className="block text-sm font-medium text-gray-700 mb-2">
+        <label className="block text-sm font-medium mb-2" style={{ color: 'var(--text-primary)' }}>
           Material
         </label>
-        <input
+        <Input
           type="text"
           value={material}
           onChange={(e) => {
             setMaterial(e.target.value);
             handleUpdate({ material: e.target.value });
           }}
-          className="w-full px-2 py-1 border border-gray-300 rounded text-sm"
         />
       </div>
 
       {/* Color */}
       <div>
-        <label className="block text-sm font-medium text-gray-700 mb-2">
+        <label className="block text-sm font-medium mb-2" style={{ color: 'var(--text-primary)' }}>
           Cor
         </label>
         <div className="flex gap-2">
@@ -180,16 +176,16 @@ export function ComponentForm({ component }: ComponentFormProps) {
               setColor(e.target.value);
               handleUpdate({ color: e.target.value });
             }}
-            className="w-12 h-8 border border-gray-300 rounded cursor-pointer"
+            className="w-12 h-8 rounded cursor-pointer border"
+            style={{ borderColor: 'var(--color-border)' }}
           />
-          <input
+          <Input
             type="text"
             value={color}
             onChange={(e) => {
               setColor(e.target.value);
               handleUpdate({ color: e.target.value });
             }}
-            className="flex-1 px-2 py-1 border border-gray-300 rounded text-sm"
           />
         </div>
       </div>
