@@ -4,6 +4,11 @@ import { supabase } from '../lib/supabase';
 import { useProjects, useCreateProject, useDeleteProject, useDuplicateProject } from '../hooks/useProject';
 import { ProjectCard } from '../components/Dashboard/ProjectCard';
 import { NewProjectDialog } from '../components/Dashboard/NewProjectDialog';
+import { Button } from '../components/ui/Button';
+import { Card, CardContent } from '../components/ui/Card';
+import { Alert } from '../components/ui/Alert';
+import { Skeleton } from '../components/ui/Skeleton';
+import { vehicles } from '../constants/vehicles';
 
 export function Dashboard() {
   const [showNewProjectDialog, setShowNewProjectDialog] = useState(false);
@@ -21,7 +26,7 @@ export function Dashboard() {
       }
     } catch (err) {
       console.error('Error creating project:', err);
-      alert('Erro ao criar projeto. Tente novamente.');
+      // TODO: Use toast/alert component
     }
   };
 
@@ -30,7 +35,7 @@ export function Dashboard() {
       await deleteProject.mutateAsync(id);
     } catch (err) {
       console.error('Error deleting project:', err);
-      alert('Erro ao deletar projeto. Tente novamente.');
+      // TODO: Use toast/alert component
     }
   };
 
@@ -43,30 +48,35 @@ export function Dashboard() {
       }
     } catch (err) {
       console.error('Error duplicating project:', err);
-      alert('Erro ao duplicar projeto. Tente novamente.');
+      // TODO: Use toast/alert component
     }
   };
 
+  const handleLogout = async () => {
+    await supabase.auth.signOut();
+    window.location.href = '/login';
+  };
+
   return (
-    <div className="min-h-screen bg-gray-50">
+    <div className="min-h-screen" style={{ backgroundColor: 'var(--bg)' }}>
       {/* Header */}
-      <header className="bg-white border-b border-gray-200">
+      <header className="border-b" style={{ backgroundColor: 'var(--surface)', borderColor: 'var(--color-border)' }}>
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4">
           <div className="flex items-center justify-between">
-            <h1 className="text-2xl font-bold text-gray-900">CamperFit Pro</h1>
+            <h1 className="text-2xl font-bold" style={{ color: 'var(--text-primary)' }}>
+              CamperFit Pro
+            </h1>
             <nav className="flex gap-4 items-center">
-              <a href="/marketplace" className="text-gray-600 hover:text-gray-900">
+              <a
+                href="/marketplace"
+                className="hover:opacity-80 transition-opacity"
+                style={{ color: 'var(--text-secondary)' }}
+              >
                 Marketplace
               </a>
-              <button
-                onClick={async () => {
-                  await supabase.auth.signOut();
-                  window.location.href = '/login';
-                }}
-                className="text-gray-600 hover:text-gray-900"
-              >
+              <Button variant="ghost" size="sm" onClick={handleLogout}>
                 Sair
-              </button>
+              </Button>
             </nav>
           </div>
         </div>
@@ -77,69 +87,83 @@ export function Dashboard() {
         <div className="mb-8">
           <div className="flex items-center justify-between mb-4">
             <div>
-              <h2 className="text-3xl font-bold text-gray-900">Meus Projetos</h2>
-              <p className="text-gray-600 mt-1">
+              <h2 className="text-3xl font-bold" style={{ color: 'var(--text-primary)' }}>
+                Meus Projetos
+              </h2>
+              <p className="mt-1" style={{ color: 'var(--text-secondary)' }}>
                 Gerencie seus projetos de motorhomes
               </p>
             </div>
-            <button
-              onClick={() => setShowNewProjectDialog(true)}
-              className="px-4 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700 font-medium"
-            >
+            <Button onClick={() => setShowNewProjectDialog(true)}>
               + Novo Projeto
-            </button>
+            </Button>
           </div>
 
           {/* Stats */}
           <div className="grid grid-cols-3 gap-4 mt-6">
-            <div className="bg-white rounded-lg p-4 border border-gray-200">
-              <div className="text-2xl font-bold text-gray-900">
-                {projects?.length || 0}
-              </div>
-              <div className="text-sm text-gray-600">Projetos</div>
-            </div>
-            <div className="bg-white rounded-lg p-4 border border-gray-200">
-              <div className="text-2xl font-bold text-gray-900">
-                {projects?.filter((p: any) => p.status === 'completed').length || 0}
-              </div>
-              <div className="text-sm text-gray-600">Completos</div>
-            </div>
-            <div className="bg-white rounded-lg p-4 border border-gray-200">
-              <div className="text-2xl font-bold text-gray-900">
-                {projects?.filter((p: any) => p.status === 'in_progress').length || 0}
-              </div>
-              <div className="text-sm text-gray-600">Em Progresso</div>
-            </div>
+            <Card>
+              <CardContent className="p-4">
+                <div className="text-2xl font-bold" style={{ color: 'var(--text-primary)' }}>
+                  {projects?.length || 0}
+                </div>
+                <div className="text-sm" style={{ color: 'var(--text-secondary)' }}>
+                  Projetos
+                </div>
+              </CardContent>
+            </Card>
+            <Card>
+              <CardContent className="p-4">
+                <div className="text-2xl font-bold" style={{ color: 'var(--text-primary)' }}>
+                  {projects?.filter((p: any) => p.status === 'completed').length || 0}
+                </div>
+                <div className="text-sm" style={{ color: 'var(--text-secondary)' }}>
+                  Completos
+                </div>
+              </CardContent>
+            </Card>
+            <Card>
+              <CardContent className="p-4">
+                <div className="text-2xl font-bold" style={{ color: 'var(--text-primary)' }}>
+                  {projects?.filter((p: any) => p.status === 'in_progress').length || 0}
+                </div>
+                <div className="text-sm" style={{ color: 'var(--text-secondary)' }}>
+                  Em Progresso
+                </div>
+              </CardContent>
+            </Card>
           </div>
         </div>
 
         {/* Projects List */}
         {isLoading && (
           <div className="text-center py-12">
-            <div className="text-gray-600">Carregando projetos...</div>
+            <div className="flex flex-col gap-4 items-center">
+              <Skeleton className="h-4 w-48" />
+              <Skeleton className="h-32 w-full max-w-md" />
+              <Skeleton className="h-32 w-full max-w-md" />
+            </div>
           </div>
         )}
 
         {error && (
-          <div className="bg-red-50 border border-red-200 rounded-lg p-4 text-red-800">
+          <Alert variant="error" className="mb-4">
             Erro ao carregar projetos. Tente novamente.
-          </div>
+          </Alert>
         )}
 
         {!isLoading && !error && (
           <>
             {!projects || projects.length === 0 ? (
-              <div className="text-center py-12 bg-white rounded-lg border border-gray-200">
-                <div className="text-gray-600 mb-4">
-                  Você ainda não tem projetos criados.
-                </div>
-                <button
-                  onClick={() => setShowNewProjectDialog(true)}
-                  className="px-4 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700"
-                >
-                  Criar Primeiro Projeto
-                </button>
-              </div>
+              <Card>
+                <CardContent className="text-center py-12">
+                  <div className="mb-4" style={{ color: 'var(--text-secondary)' }}>
+                    Você ainda não tem projetos criados.
+                  </div>
+                  <Button onClick={() => setShowNewProjectDialog(true)}>
+                    Criar Primeiro Projeto
+                  </Button>
+                </CardContent>
+              </Card>
             ) : (
               <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
                 {projects.map((project: any) => (
@@ -155,33 +179,35 @@ export function Dashboard() {
           </>
         )}
 
-        {/* Templates Section */}
+        {/* Vehicle Templates Section - Dynamic from vehicles.ts */}
         <div className="mt-12">
-          <h3 className="text-xl font-semibold text-gray-900 mb-4">
-            Templates Sugeridos
+          <h3 className="text-xl font-semibold mb-4" style={{ color: 'var(--text-primary)' }}>
+            Veículos Disponíveis
           </h3>
           <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-            <div className="bg-white rounded-lg p-4 border border-gray-200 text-center">
-              <div className="text-3xl mb-2">🚐</div>
-              <div className="font-semibold mb-2">Sprinter 313 Padrão</div>
-              <button className="px-4 py-2 bg-gray-100 text-gray-700 rounded-md hover:bg-gray-200 text-sm">
-                Usar Template
-              </button>
-            </div>
-            <div className="bg-white rounded-lg p-4 border border-gray-200 text-center">
-              <div className="text-3xl mb-2">🚐</div>
-              <div className="font-semibold mb-2">Kombi Padrão</div>
-              <button className="px-4 py-2 bg-gray-100 text-gray-700 rounded-md hover:bg-gray-200 text-sm">
-                Usar Template
-              </button>
-            </div>
-            <div className="bg-white rounded-lg p-4 border border-gray-200 text-center">
-              <div className="text-3xl mb-2">🚐</div>
-              <div className="font-semibold mb-2">Furgão Padrão</div>
-              <button className="px-4 py-2 bg-gray-100 text-gray-700 rounded-md hover:bg-gray-200 text-sm">
-                Usar Template
-              </button>
-            </div>
+            {vehicles.slice(0, 6).map((vehicle) => (
+              <Card key={vehicle.id}>
+                <CardContent className="p-4 text-center">
+                  <div className="text-3xl mb-2">🚐</div>
+                  <div className="font-semibold mb-2" style={{ color: 'var(--text-primary)' }}>
+                    {vehicle.name}
+                  </div>
+                  <div className="text-sm mb-3" style={{ color: 'var(--text-secondary)' }}>
+                    Payload: {vehicle.payloadMax} kg
+                  </div>
+                  <Button
+                    variant="ghost"
+                    size="sm"
+                    onClick={() => {
+                      setShowNewProjectDialog(true);
+                      // Vehicle will be selected in dialog
+                    }}
+                  >
+                    Criar Projeto
+                  </Button>
+                </CardContent>
+              </Card>
+            ))}
           </div>
         </div>
       </main>

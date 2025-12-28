@@ -58,18 +58,29 @@ export function StatsPanel() {
 
   if (!stats) return null;
 
+  // Determine payload color based on percentage
+  const getPayloadColor = () => {
+    if (stats.payloadPercentage > 90) return 'var(--color-error)';
+    if (stats.payloadPercentage > 75) return 'var(--color-warning)';
+    return 'var(--color-success)';
+  };
+
   return (
-    <div className="p-4 bg-white border-b border-gray-200">
-      <h3 className="text-sm font-medium text-gray-700 mb-3">Estatísticas</h3>
+    <div className="p-4 border-b" style={{ backgroundColor: 'var(--surface)', borderColor: 'var(--color-border)' }}>
+      <h3 className="text-sm font-medium mb-3" style={{ color: 'var(--text-primary)' }}>
+        Estatísticas
+      </h3>
       
       <div className="space-y-3 text-sm">
         {/* Peso */}
         <div>
           <div className="flex justify-between mb-1">
-            <span className="text-gray-600">Peso Total:</span>
-            <span className="font-medium">{stats.totalWeight.toFixed(1)} kg</span>
+            <span style={{ color: 'var(--text-secondary)' }}>Peso Total:</span>
+            <span className="font-medium" style={{ color: 'var(--text-primary)' }}>
+              {stats.totalWeight.toFixed(1)} kg
+            </span>
           </div>
-          <div className="flex justify-between text-xs text-gray-500">
+          <div className="flex justify-between text-xs" style={{ color: 'var(--text-secondary)' }}>
             <span>Componentes: {stats.componentsWeight.toFixed(1)} kg</span>
             <span>Shell: {stats.shellWeight.toFixed(1)} kg</span>
           </div>
@@ -78,58 +89,62 @@ export function StatsPanel() {
         {/* Payload */}
         <div>
           <div className="flex justify-between mb-1">
-            <span className="text-gray-600">Payload:</span>
-            <span className={`font-medium ${
-              stats.payloadPercentage > 90 ? 'text-red-600' :
-              stats.payloadPercentage > 75 ? 'text-yellow-600' :
-              'text-green-600'
-            }`}>
+            <span style={{ color: 'var(--text-secondary)' }}>Payload:</span>
+            <span className="font-medium" style={{ color: getPayloadColor() }}>
               {stats.payloadUsed.toFixed(1)} / {stats.payloadMax} kg
             </span>
           </div>
-          <div className="w-full bg-gray-200 rounded-full h-2">
+          <div className="w-full rounded-full h-2" style={{ backgroundColor: 'var(--color-border)' }}>
             <div
-              className={`h-2 rounded-full ${
-                stats.payloadPercentage > 90 ? 'bg-red-600' :
-                stats.payloadPercentage > 75 ? 'bg-yellow-600' :
-                'bg-green-600'
-              }`}
-              style={{ width: `${Math.min(stats.payloadPercentage, 100)}%` }}
+              className="h-2 rounded-full"
+              style={{
+                width: `${Math.min(stats.payloadPercentage, 100)}%`,
+                backgroundColor: getPayloadColor(),
+              }}
             />
           </div>
-          <div className="text-xs text-gray-500 mt-1">
+          <div className="text-xs mt-1" style={{ color: 'var(--text-secondary)' }}>
             {stats.payloadPercentage.toFixed(1)}% usado | {stats.payloadAvailable.toFixed(1)} kg disponível
           </div>
         </div>
 
         {/* Centro de Gravidade */}
-        <div className="pt-2 border-t border-gray-200">
-          <div className="text-gray-600 mb-2">Centro de Gravidade:</div>
+        <div className="pt-2" style={{ borderTop: `1px solid var(--color-border)` }}>
+          <div className="mb-2" style={{ color: 'var(--text-secondary)' }}>
+            Centro de Gravidade:
+          </div>
           <div className="space-y-1 text-xs">
             <div className="flex justify-between">
-              <span className="text-gray-500">X:</span>
-              <span className="font-mono">{stats.cgX.toFixed(0)} mm</span>
+              <span style={{ color: 'var(--text-secondary)' }}>X:</span>
+              <span className="font-mono" style={{ color: 'var(--text-primary)' }}>
+                {stats.cgX.toFixed(0)} mm
+              </span>
             </div>
             <div className="flex justify-between">
-              <span className="text-gray-500">Y:</span>
-              <span className="font-mono">{stats.cgY.toFixed(0)} mm</span>
+              <span style={{ color: 'var(--text-secondary)' }}>Y:</span>
+              <span className="font-mono" style={{ color: 'var(--text-primary)' }}>
+                {stats.cgY.toFixed(0)} mm
+              </span>
             </div>
             <div className="flex justify-between">
-              <span className="text-gray-500">Z:</span>
-              <span className="font-mono">{stats.cgZ.toFixed(0)} mm</span>
+              <span style={{ color: 'var(--text-secondary)' }}>Z:</span>
+              <span className="font-mono" style={{ color: 'var(--text-primary)' }}>
+                {stats.cgZ.toFixed(0)} mm
+              </span>
             </div>
           </div>
         </div>
 
         {/* Componentes */}
-        <div className="pt-2 border-t border-gray-200">
+        <div className="pt-2" style={{ borderTop: `1px solid var(--color-border)` }}>
           <div className="flex justify-between">
-            <span className="text-gray-600">Componentes:</span>
-            <span className="font-medium">{components.length}</span>
+            <span style={{ color: 'var(--text-secondary)' }}>Componentes:</span>
+            <span className="font-medium" style={{ color: 'var(--text-primary)' }}>
+              {components.length}
+            </span>
           </div>
         </div>
       </div>
     </div>
   );
 }
-

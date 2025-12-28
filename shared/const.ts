@@ -1,5 +1,9 @@
 // Constantes compartilhadas
 
+// Canvas dimensions (can be overridden by user preferences)
+export const CANVAS_DEFAULT_WIDTH = 1200;
+export const CANVAS_DEFAULT_HEIGHT = 800;
+
 export const VEHICLE_TYPE_OPTIONS = [
   { value: 'sprinter', label: 'Sprinter' },
   { value: 'kombi', label: 'Kombi' },

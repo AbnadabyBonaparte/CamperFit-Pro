@@ -54,12 +54,15 @@ interface ProjectState {
   error: string | null;
 
   // Actions
+  setProject: (project: Project | null) => void;
   setCurrentProject: (project: Project | null) => void;
   setComponents: (components: Component[]) => void;
   addComponent: (component: Component) => void;
   updateComponent: (id: string, updates: Partial<Component>) => void;
   removeComponent: (id: string) => void;
   selectComponent: (id: string | null) => void;
+  setVehicleId: (vehicleId: string) => void;
+  setShellMaterial: (materialId: string) => void;
   setLoading: (loading: boolean) => void;
   setError: (error: string | null) => void;
   
@@ -133,6 +136,31 @@ export const useProjectStore = create<ProjectState>((set) => ({
         selected: comp.id === id,
       })),
     })),
+  
+  setVehicleId: (vehicleId) => set((state) => {
+    if (!state.currentProject) return state;
+    return {
+      currentProject: {
+        ...state.currentProject,
+        vehicleId,
+      },
+    };
+  }),
+  
+  setShellMaterial: (materialId) => set((state) => {
+    if (!state.currentProject) return state;
+    return {
+      currentProject: {
+        ...state.currentProject,
+        shellParams: {
+          ...(state.currentProject.shellParams || {}),
+          materialId,
+        },
+      },
+    };
+  }),
+  
+  setProject: (project) => set({ currentProject: project }),
   
   setLoading: (loading) => set({ isLoading: loading }),
   

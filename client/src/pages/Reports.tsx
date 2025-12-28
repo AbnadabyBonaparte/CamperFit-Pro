@@ -1,10 +1,18 @@
+import { Card, CardContent, CardHeader, CardTitle } from '../components/ui/Card';
+
 export function Reports() {
   return (
-    <div className="min-h-screen bg-gray-50 p-6">
-      <h1 className="text-3xl font-bold text-gray-900 mb-4">
-        Relatórios - Em desenvolvimento
-      </h1>
+    <div className="min-h-screen p-6" style={{ backgroundColor: 'var(--bg)' }}>
+      <Card>
+        <CardHeader>
+          <CardTitle>Relatórios</CardTitle>
+        </CardHeader>
+        <CardContent>
+          <div style={{ color: 'var(--text-secondary)' }}>
+            Funcionalidade de relatórios em desenvolvimento.
+          </div>
+        </CardContent>
+      </Card>
     </div>
   );
 }
-

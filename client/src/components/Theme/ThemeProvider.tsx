@@ -39,6 +39,14 @@ export function ThemeProvider({ children }: ThemeProviderProps) {
     root.style.setProperty('--color-success', currentTheme.colors.success);
     root.style.setProperty('--color-warning', currentTheme.colors.warning);
     root.style.setProperty('--color-error', currentTheme.colors.error);
+    
+    // Shorthand aliases for convenience
+    root.style.setProperty('--bg', currentTheme.colors.background);
+    root.style.setProperty('--surface', currentTheme.colors.surface);
+    root.style.setProperty('--text-primary', currentTheme.colors.text);
+    root.style.setProperty('--text-secondary', currentTheme.colors.textSecondary);
+    root.style.setProperty('--accent-1', currentTheme.colors.primary);
+    root.style.setProperty('--accent-2', currentTheme.colors.secondary);
   }, [currentTheme]);
 
   return (

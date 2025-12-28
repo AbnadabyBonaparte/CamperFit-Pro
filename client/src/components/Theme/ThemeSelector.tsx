@@ -1,30 +1,28 @@
 import { useUIStore } from '../../stores/uiStore';
 import { themes, ThemeName } from '../../constants/themes';
+import { Button } from '../ui/Button';
 
 export function ThemeSelector() {
   const { theme, setTheme } = useUIStore();
 
   return (
-    <div className="p-4 border-b border-gray-200">
-      <label className="block text-sm font-medium text-gray-700 mb-2">
+    <div className="p-4 border-b" style={{ borderColor: 'var(--color-border)' }}>
+      <label className="block text-sm font-medium mb-2" style={{ color: 'var(--text-primary)' }}>
         Tema
       </label>
       <div className="grid grid-cols-2 gap-2">
         {(Object.keys(themes) as ThemeName[]).map((themeName) => (
-          <button
+          <Button
             key={themeName}
+            variant={theme === themeName ? 'primary' : 'ghost'}
+            size="sm"
             onClick={() => setTheme(themeName)}
-            className={`px-3 py-2 rounded text-sm border-2 transition-all ${
-              theme === themeName
-                ? 'border-blue-600 bg-blue-50 text-blue-700'
-                : 'border-gray-200 hover:border-gray-300 bg-white text-gray-700'
-            }`}
+            className="text-sm"
           >
             {themes[themeName].displayName}
-          </button>
+          </Button>
         ))}
       </div>
     </div>
   );
 }
-

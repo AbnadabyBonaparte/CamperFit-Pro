@@ -1,4 +1,6 @@
 import { Link } from 'react-router-dom';
+import { Card, CardContent } from '../ui/Card';
+import { Button } from '../ui/Button';
 
 // Temporary Project type (should match backend)
 interface Project {
@@ -25,101 +27,99 @@ interface ProjectCardProps {
 }
 
 export function ProjectCard({ project, onDelete, onDuplicate }: ProjectCardProps) {
-  const handleDelete = (e: React.MouseEvent) => {
-    e.preventDefault();
-    e.stopPropagation();
-    if (confirm(`Tem certeza que deseja deletar "${project.name}"?`)) {
-      onDelete(project.id);
-    }
+  const statusColors = {
+    draft: 'var(--text-secondary)',
+    in_progress: 'var(--color-warning)',
+    completed: 'var(--color-success)',
+    archived: 'var(--text-secondary)',
   };
 
-  const handleDuplicate = (e: React.MouseEvent) => {
-    e.preventDefault();
-    e.stopPropagation();
-    onDuplicate(project.id);
+  const statusLabels = {
+    draft: 'Rascunho',
+    in_progress: 'Em Progresso',
+    completed: 'Completo',
+    archived: 'Arquivado',
   };
-
-  const statusColor = {
-    draft: 'bg-gray-100 text-gray-800',
-    in_progress: 'bg-yellow-100 text-yellow-800',
-    completed: 'bg-green-100 text-green-800',
-    archived: 'bg-gray-100 text-gray-600',
-  }[project.status || 'draft'];
 
   return (
-    <Link
-      to={`/editor/${project.id}`}
-      className="block bg-white border border-gray-300 rounded-lg p-4 hover:shadow-lg transition-shadow"
-    >
-      <div className="flex items-start justify-between mb-3">
-        <div className="flex-1">
-          <h3 className="text-lg font-semibold text-gray-900 mb-1">
-            {project.name}
-          </h3>
-          {project.description && (
-            <p className="text-sm text-gray-600 line-clamp-2">
-              {project.description}
-            </p>
+    <Card>
+      <CardContent className="p-4">
+        <div className="flex items-start justify-between mb-2">
+          <Link
+            to={`/editor/${project.id}`}
+            className="flex-1 hover:opacity-80 transition-opacity"
+          >
+            <h3 className="text-lg font-semibold mb-1" style={{ color: 'var(--text-primary)' }}>
+              {project.name}
+            </h3>
+            {project.description && (
+              <p className="text-sm mb-2" style={{ color: 'var(--text-secondary)' }}>
+                {project.description}
+              </p>
+            )}
+          </Link>
+        </div>
+
+        <div className="flex items-center gap-2 mb-4">
+          <span
+            className="text-xs px-2 py-1 rounded"
+            style={{
+              backgroundColor: statusColors[project.status || 'draft'] + '20',
+              color: statusColors[project.status || 'draft'],
+            }}
+          >
+            {statusLabels[project.status || 'draft']}
+          </span>
+          {project.vehicleType && (
+            <span className="text-xs" style={{ color: 'var(--text-secondary)' }}>
+              {project.vehicleType}
+            </span>
           )}
         </div>
-        <span className={`px-2 py-1 rounded text-xs font-medium ${statusColor}`}>
-          {project.status === 'draft' && '📝 Rascunho'}
-          {project.status === 'in_progress' && '⚙️ Em Progresso'}
-          {project.status === 'completed' && '✅ Completo'}
-          {project.status === 'archived' && '📦 Arquivado'}
-        </span>
-      </div>
 
-      <div className="grid grid-cols-2 gap-4 mb-3 text-sm text-gray-600">
-        <div>
-          <span className="font-medium">Tipo:</span>{' '}
-          {project.vehicleType || 'Custom'}
-        </div>
-        {project.totalWeight && (
-          <div>
-            <span className="font-medium">Peso:</span>{' '}
-            {project.totalWeight.toFixed(1)} kg
+        {(project.totalWeight || project.length) && (
+          <div className="space-y-1 mb-4 text-sm" style={{ color: 'var(--text-secondary)' }}>
+            {project.totalWeight && (
+              <div>Peso: {project.totalWeight.toFixed(1)} kg</div>
+            )}
+            {project.length && project.width && project.height && (
+              <div>
+                {project.length.toFixed(0)} × {project.width.toFixed(0)} ×{' '}
+                {project.height.toFixed(0)} mm
+              </div>
+            )}
           </div>
         )}
-        {project.length && project.width && (
-          <div>
-            <span className="font-medium">Dimensões:</span>{' '}
-            {project.length.toFixed(0)} × {project.width.toFixed(0)} mm
-          </div>
-        )}
-        {project.cgX && (
-          <div>
-            <span className="font-medium">CG:</span>{' '}
-            {project.cgX.toFixed(0)}, {project.cgY.toFixed(0)}, {project.cgZ.toFixed(0)} mm
-          </div>
-        )}
-      </div>
 
-      <div className="flex items-center justify-between text-xs text-gray-500 pt-3 border-t border-gray-200">
-        <div>
-          Criado: {new Date(project.createdAt).toLocaleDateString('pt-BR')}
-          {project.updatedAt && (
-            <> • Atualizado: {new Date(project.updatedAt).toLocaleDateString('pt-BR')}</>
-          )}
-        </div>
         <div className="flex gap-2">
-          <button
-            onClick={handleDuplicate}
-            className="px-2 py-1 text-blue-600 hover:bg-blue-50 rounded"
-            title="Duplicar"
+          <Button
+            variant="ghost"
+            size="sm"
+            className="flex-1"
+            onClick={() => onDuplicate(project.id)}
           >
-            📋
-          </button>
-          <button
-            onClick={handleDelete}
-            className="px-2 py-1 text-red-600 hover:bg-red-50 rounded"
-            title="Deletar"
+            Duplicar
+          </Button>
+          <Button
+            variant="danger"
+            size="sm"
+            className="flex-1"
+            onClick={() => {
+              if (confirm('Tem certeza que deseja deletar este projeto?')) {
+                onDelete(project.id);
+              }
+            }}
           >
-            🗑️
-          </button>
+            Deletar
+          </Button>
         </div>
-      </div>
-    </Link>
+
+        {project.updatedAt && (
+          <div className="text-xs mt-2" style={{ color: 'var(--text-secondary)' }}>
+            Atualizado em {new Date(project.updatedAt).toLocaleDateString()}
+          </div>
+        )}
+      </CardContent>
+    </Card>
   );
 }
-

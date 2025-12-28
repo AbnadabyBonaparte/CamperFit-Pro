@@ -1,119 +1,130 @@
-import { componentLibrary, getComponentsByCategory, ComponentCategory, ComponentLibraryItem } from '../../constants/componentLibrary';
-import { useProjectStore } from '../../stores/projectStore';
 import { useState } from 'react';
+import { useUIStore } from '../../stores/uiStore';
+import { componentLibrary, ComponentCategory } from '../../constants/componentLibrary';
+import { Button } from '../ui/Button';
+import { Input } from '../ui/Input';
+import { Card, CardContent } from '../ui/Card';
+import { Badge } from '../ui/Badge';
 
-const categoryLabels: Record<ComponentCategory, string> = {
-  'sleeping': 'Dormitório',
-  'kitchen': 'Cozinha',
-  'storage': 'Armazenamento',
-  'electrical': 'Elétrica',
-  'plumbing': 'Hidráulica',
-  'furniture': 'Mobiliário',
-};
+const categories: ComponentCategory[] = ['sleeping', 'kitchen', 'storage', 'electrical', 'plumbing', 'furniture'];
 
 export function ComponentLibraryPanel() {
-  const [selectedCategory, setSelectedCategory] = useState<ComponentCategory | 'all'>('all');
+  const { componentLibraryOpen, toggleComponentLibrary } = useUIStore();
   const [searchQuery, setSearchQuery] = useState('');
-  const { addComponent } = useProjectStore();
+  const [selectedCategory, setSelectedCategory] = useState<ComponentCategory | 'all'>('all');
 
-  const filteredComponents = selectedCategory === 'all'
-    ? componentLibrary
-    : getComponentsByCategory(selectedCategory);
+  if (!componentLibraryOpen) return null;
 
-  const displayComponents = searchQuery
-    ? filteredComponents.filter((c) =>
-        c.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
-        c.description?.toLowerCase().includes(searchQuery.toLowerCase())
-      )
-    : filteredComponents;
+  const filteredComponents = componentLibrary.filter((component) => {
+    const matchesSearch = component.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
+      component.description?.toLowerCase().includes(searchQuery.toLowerCase());
+    const matchesCategory = selectedCategory === 'all' || component.category === selectedCategory;
+    return matchesSearch && matchesCategory;
+  });
 
-  const handleDragStart = (e: React.DragEvent, component: ComponentLibraryItem) => {
-    e.dataTransfer.setData('component-library-id', component.id);
-    e.dataTransfer.effectAllowed = 'copy';
-  };
-
-  const handleAddComponent = (component: ComponentLibraryItem) => {
-    const newComponent = {
-      id: `comp-${Date.now()}-${Math.random().toString(36).substr(2, 9)}`,
-      componentLibraryId: component.id,
-      position: { x: 0, y: 0, z: 0 },
-      rotation: { x: 0, y: 0, z: 0 },
-      dimensions: component.dimensions,
-      weight: component.weight,
-      color: component.defaultColor,
-      material: component.properties?.material,
-    };
-
-    addComponent(newComponent);
+  const handleDragStart = (e: React.DragEvent, componentId: string) => {
+    e.dataTransfer.setData('componentId', componentId);
   };
 
   return (
-    <div className="w-64 bg-white border-r border-gray-200 flex flex-col h-full">
-      <div className="p-4 border-b border-gray-200">
-        <h3 className="text-sm font-medium text-gray-700 mb-2">Biblioteca de Componentes</h3>
-        
+    <div
+      className="w-64 border-r flex flex-col h-full"
+      style={{ backgroundColor: 'var(--surface)', borderColor: 'var(--color-border)' }}
+    >
+      <div className="p-4 border-b" style={{ borderColor: 'var(--color-border)' }}>
+        <div className="flex items-center justify-between mb-2">
+          <h3 className="text-sm font-medium" style={{ color: 'var(--text-primary)' }}>
+            Biblioteca de Componentes
+          </h3>
+          <Button variant="ghost" size="sm" onClick={toggleComponentLibrary}>
+            ✕
+          </Button>
+        </div>
+
         {/* Search */}
-        <input
+        <Input
           type="text"
           placeholder="Buscar..."
           value={searchQuery}
           onChange={(e) => setSearchQuery(e.target.value)}
-          className="w-full px-2 py-1 text-sm border border-gray-300 rounded-md focus:outline-none focus:ring-1 focus:ring-blue-500"
+          className="mb-2"
         />
-      </div>
 
-      {/* Categories */}
-      <div className="p-2 border-b border-gray-200 flex flex-wrap gap-1">
-        <button
-          onClick={() => setSelectedCategory('all')}
-          className={`px-2 py-1 text-xs rounded ${
-            selectedCategory === 'all'
-              ? 'bg-blue-600 text-white'
-              : 'bg-gray-200 text-gray-700 hover:bg-gray-300'
-          }`}
-        >
-          Todos
-        </button>
-        {(Object.keys(categoryLabels) as ComponentCategory[]).map((category) => (
-          <button
-            key={category}
-            onClick={() => setSelectedCategory(category)}
-            className={`px-2 py-1 text-xs rounded ${
-              selectedCategory === category
-                ? 'bg-blue-600 text-white'
-                : 'bg-gray-200 text-gray-700 hover:bg-gray-300'
-            }`}
+        {/* Category Filter */}
+        <div className="flex flex-wrap gap-1">
+          <Button
+            variant={selectedCategory === 'all' ? 'primary' : 'ghost'}
+            size="sm"
+            onClick={() => setSelectedCategory('all')}
+            className="text-xs"
           >
-            {categoryLabels[category]}
-          </button>
-        ))}
+            Todos
+          </Button>
+          {categories.map((category) => (
+            <Button
+              key={category}
+              variant={selectedCategory === category ? 'primary' : 'ghost'}
+              size="sm"
+              onClick={() => setSelectedCategory(category)}
+              className="text-xs"
+            >
+            {category === 'sleeping' && 'Dorm'}
+            {category === 'kitchen' && 'Cozinha'}
+            {category === 'storage' && 'Armazen.'}
+            {category === 'electrical' && 'Elétrica'}
+            {category === 'plumbing' && 'Hidráulica'}
+            {category === 'furniture' && 'Mobília'}
+            </Button>
+          ))}
+        </div>
       </div>
 
       {/* Component List */}
-      <div className="flex-1 overflow-y-auto p-2">
-        <div className="space-y-2">
-          {displayComponents.map((component) => (
-            <div
+      <div className="flex-1 overflow-y-auto p-4 space-y-2">
+        {filteredComponents.length === 0 ? (
+          <div className="text-center py-8" style={{ color: 'var(--text-secondary)' }}>
+            Nenhum componente encontrado
+          </div>
+        ) : (
+          filteredComponents.map((component) => (
+            <Card
               key={component.id}
               draggable
-              onDragStart={(e) => handleDragStart(e, component)}
-              onClick={() => handleAddComponent(component)}
-              className="p-2 border border-gray-300 rounded cursor-move hover:bg-gray-50 hover:border-blue-500 transition-colors"
+              onDragStart={(e) => handleDragStart(e, component.id)}
+              className="cursor-move hover:opacity-80 transition-opacity"
+              style={{
+                borderColor: 'var(--color-border)',
+              }}
             >
-              <div className="text-sm font-medium text-gray-700">{component.name}</div>
-              {component.description && (
-                <div className="text-xs text-gray-500 mt-1">{component.description}</div>
-              )}
-              <div className="text-xs text-gray-400 mt-1">
-                {component.dimensions.length}×{component.dimensions.width}×{component.dimensions.height}mm
-                {' • '}
-                {component.weight}kg
-              </div>
-            </div>
-          ))}
-        </div>
+              <CardContent className="p-3">
+                <div className="flex items-start justify-between mb-1">
+                  <div className="text-sm font-medium" style={{ color: 'var(--text-primary)' }}>
+                    {component.name}
+                  </div>
+                  <Badge variant="default" className="text-xs">
+                    {component.category === 'sleeping' && 'Dorm'}
+                    {component.category === 'kitchen' && 'Cozinha'}
+                    {component.category === 'storage' && 'Armazen.'}
+                    {component.category === 'electrical' && 'Elétrica'}
+                    {component.category === 'plumbing' && 'Hidráulica'}
+                    {component.category === 'furniture' && 'Mobília'}
+                  </Badge>
+                </div>
+                {component.description && (
+                  <div className="text-xs mt-1" style={{ color: 'var(--text-secondary)' }}>
+                    {component.description}
+                  </div>
+                )}
+                <div className="text-xs mt-1" style={{ color: 'var(--text-secondary)' }}>
+                  {component.dimensions.length} × {component.dimensions.width} × {component.dimensions.height} mm
+                  {' • '}
+                  {component.weight} kg
+                </div>
+              </CardContent>
+            </Card>
+          ))
+        )}
       </div>
     </div>
   );
 }
-

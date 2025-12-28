@@ -1,55 +1,34 @@
-import { vehicles, getVehicleById, Vehicle } from '../../constants/vehicles';
 import { useProjectStore } from '../../stores/projectStore';
+import { vehicles, getVehicleById } from '../../constants/vehicles';
+import { Select } from '../ui/Select';
+import { Card, CardContent } from '../ui/Card';
 
 export function VehicleSelector() {
-  const { currentProject, setCurrentProject } = useProjectStore();
+  const { currentProject, setVehicleId } = useProjectStore();
 
-  const handleVehicleChange = (vehicleId: string) => {
-    const vehicle = getVehicleById(vehicleId);
-    if (!vehicle || !currentProject) return;
+  const selectedVehicleId = currentProject?.vehicleId || vehicles[0].id;
+  const selectedVehicle = getVehicleById(selectedVehicleId) || vehicles[0];
 
-    setCurrentProject({
-      ...currentProject,
-      vehicleId: vehicleId,
-      vehicleType: 'custom', // Atualizar tipo se necessário
-      length: vehicle.bedLength,
-      width: vehicle.bedWidthInt,
-      wheelbase: vehicle.wheelbase,
-      maxGVWR: vehicle.payloadMax,
-    });
+  const handleVehicleChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
+    const newVehicleId = e.target.value;
+    setVehicleId(newVehicleId);
   };
 
   return (
-    <div className="p-4 bg-white border-b border-gray-200">
-      <label className="block text-sm font-medium text-gray-700 mb-2">
+    <div className="p-4 border-b" style={{ backgroundColor: 'var(--surface)', borderColor: 'var(--color-border)' }}>
+      <label className="block text-sm font-medium mb-2" style={{ color: 'var(--text-primary)' }}>
         Veículo Base
       </label>
-      <select
-        value={currentProject?.vehicleId || vehicles[0].id}
-        onChange={(e) => handleVehicleChange(e.target.value)}
-        className="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
-      >
+      <Select value={selectedVehicleId} onChange={handleVehicleChange}>
         {vehicles.map((vehicle) => (
           <option key={vehicle.id} value={vehicle.id}>
-            {vehicle.manufacturer} {vehicle.model} {vehicle.year || ''}
+            {vehicle.name} ({vehicle.manufacturer} {vehicle.model})
           </option>
         ))}
-      </select>
-      
-      {currentProject?.vehicleId && (
-        <div className="mt-2 text-xs text-gray-500">
-          {(() => {
-            const vehicle = getVehicleById(currentProject.vehicleId!);
-            return vehicle ? (
-              <>
-                Caçamba: {vehicle.bedLength}mm × {vehicle.bedWidthInt}mm | 
-                Payload: {vehicle.payloadMax}kg
-              </>
-            ) : null;
-          })()}
-        </div>
-      )}
+      </Select>
+      <div className="mt-2 text-xs" style={{ color: 'var(--text-secondary)' }}>
+        Payload: {selectedVehicle.payloadMax} kg | Caçamba: {selectedVehicle.bedLength} × {selectedVehicle.bedWidthInt} mm
+      </div>
     </div>
   );
 }
-

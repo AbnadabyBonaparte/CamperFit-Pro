@@ -2,6 +2,8 @@ import { useEffect, useState } from 'react';
 import { Navigate } from 'react-router-dom';
 import { supabase } from '../../lib/supabase';
 import type { User } from '@supabase/supabase-js';
+import { Skeleton } from '../ui/Skeleton';
+import { Card, CardContent } from '../ui/Card';
 
 interface ProtectedRouteProps {
   children: React.ReactNode;
@@ -31,8 +33,15 @@ export function ProtectedRoute({ children }: ProtectedRouteProps) {
 
   if (loading) {
     return (
-      <div className="min-h-screen flex items-center justify-center">
-        <div className="text-gray-600">Carregando...</div>
+      <div className="min-h-screen flex items-center justify-center" style={{ backgroundColor: 'var(--bg)' }}>
+        <Card>
+          <CardContent className="p-8">
+            <div className="flex flex-col gap-4 items-center">
+              <Skeleton className="h-4 w-32" />
+              <Skeleton className="h-4 w-48" />
+            </div>
+          </CardContent>
+        </Card>
       </div>
     );
   }
@@ -43,4 +52,3 @@ export function ProtectedRoute({ children }: ProtectedRouteProps) {
 
   return <>{children}</>;
 }
-

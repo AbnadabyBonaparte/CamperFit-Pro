@@ -9,6 +9,7 @@ import { StatsPanel } from '../components/Editor/StatsPanel';
 import { ThemeSelector } from '../components/Theme/ThemeSelector';
 import { useKeyboardShortcuts } from '../hooks/useKeyboardShortcuts';
 import { useUIStore } from '../stores/uiStore';
+import { CANVAS_DEFAULT_WIDTH, CANVAS_DEFAULT_HEIGHT } from '../../../shared/const';
 
 export function Editor() {
   const { propertyPanelOpen, canvasMode, componentLibraryOpen } = useUIStore();
@@ -17,9 +18,12 @@ export function Editor() {
   useKeyboardShortcuts();
 
   return (
-    <div className="flex h-screen bg-gray-100">
+    <div className="flex h-screen" style={{ backgroundColor: 'var(--bg)' }}>
       {/* Sidebar Left - Vehicle & Materials */}
-      <div className="w-64 bg-white border-r border-gray-200 flex flex-col">
+      <div
+        className="w-64 border-r flex flex-col"
+        style={{ backgroundColor: 'var(--surface)', borderColor: 'var(--color-border)' }}
+      >
         <ThemeSelector />
         <VehicleSelector />
         <StatsPanel />
@@ -40,11 +44,11 @@ export function Editor() {
         <div className="flex-1 p-4 overflow-hidden">
           {canvasMode === '2d' ? (
             <div className="w-full h-full overflow-auto">
-              <Canvas2D width={1200} height={800} />
+              <Canvas2D width={CANVAS_DEFAULT_WIDTH} height={CANVAS_DEFAULT_HEIGHT} />
             </div>
           ) : (
             <div className="w-full h-full">
-              <Canvas3D width={1200} height={800} />
+              <Canvas3D width={CANVAS_DEFAULT_WIDTH} height={CANVAS_DEFAULT_HEIGHT} />
             </div>
           )}
         </div>
@@ -55,4 +59,3 @@ export function Editor() {
     </div>
   );
 }
-
