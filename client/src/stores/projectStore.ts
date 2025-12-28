@@ -6,11 +6,31 @@ interface Project {
   name: string;
   description?: string;
   vehicleType?: string;
+  vehicleId?: string; // ID do veículo selecionado
   length?: number;
   width?: number;
   height?: number;
   wheelbase?: number;
   maxGVWR?: number;
+  
+  // Shell parameters
+  shellParams?: {
+    outerWidth: number;
+    floorLength: number;
+    interiorHeight: number;
+    alcoveDepth: number;
+    alcoveAngle: number;
+    alcoveHeight: number;
+    bojoOffset: number;
+    bojoRadius: number;
+    roofPackage: number;
+    showFrame: boolean;
+    frameSize: '50x50' | '40x40' | '30x30';
+    externalMaterialId?: string;
+    structureMaterialId?: string;
+    insulationMaterialId?: string;
+    internalMaterialId?: string;
+  };
 }
 
 interface Component {

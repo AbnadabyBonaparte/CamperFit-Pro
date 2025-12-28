@@ -15,6 +15,8 @@ interface UIState {
 
   // View settings
   theme: 'light' | 'dark';
+  showShell: boolean;
+  showVehicle: boolean;
 
   // Actions
   setCanvasMode: (mode: '2d' | '3d') => void;
@@ -26,6 +28,8 @@ interface UIState {
   toggleComponentLibrary: () => void;
   toggleCalculationsPanel: () => void;
   setTheme: (theme: 'light' | 'dark') => void;
+  setShowShell: (show: boolean) => void;
+  setShowVehicle: (show: boolean) => void;
 }
 
 export const useUIStore = create<UIState>((set) => ({
@@ -43,6 +47,10 @@ export const useUIStore = create<UIState>((set) => ({
 
   // Theme
   theme: 'light',
+  
+  // Shell & Vehicle
+  showShell: true,
+  showVehicle: true,
 
   // Actions
   setCanvasMode: (mode) => set({ canvasMode: mode }),
@@ -54,5 +62,7 @@ export const useUIStore = create<UIState>((set) => ({
   toggleComponentLibrary: () => set((state) => ({ componentLibraryOpen: !state.componentLibraryOpen })),
   toggleCalculationsPanel: () => set((state) => ({ calculationsPanelOpen: !state.calculationsPanelOpen })),
   setTheme: (theme) => set({ theme }),
+  setShowShell: (show) => set({ showShell: show }),
+  setShowVehicle: (show) => set({ showVehicle: show }),
 }));
 

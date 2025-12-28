@@ -7,6 +7,9 @@ import { PointerLockControls } from 'three/examples/jsm/controls/PointerLockCont
 import { useProjectStore } from '../../stores/projectStore';
 import { useUIStore } from '../../stores/uiStore';
 import { getComponentGeometry, getComponentMaterial } from './ModelLibrary';
+import { Shell3D } from './Shell3D';
+import { Vehicle3D } from './Vehicle3D';
+import { defaultVehicle } from '../../constants/vehicles';
 
 interface Canvas3DProps {
   width?: number;
@@ -26,8 +29,8 @@ export function Canvas3D({ width = 1200, height = 800 }: Canvas3DProps) {
   const animationFrameRef = useRef<number | null>(null);
   const [isFirstPerson, setIsFirstPerson] = useState(false);
 
-  const { components, selectComponent, selectedComponentId } = useProjectStore();
-  const { showGrid } = useUIStore();
+  const { components, selectComponent, selectedComponentId, currentProject } = useProjectStore();
+  const { showGrid, showShell, showVehicle } = useUIStore();
 
   // Initialize Three.js scene
   useEffect(() => {
