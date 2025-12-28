@@ -4,6 +4,7 @@ import { supabase } from '../lib/supabase';
 import { Button } from '../components/ui/Button';
 import { Card, CardContent, CardHeader, CardTitle } from '../components/ui/Card';
 import { Alert } from '../components/ui/Alert';
+import { Input } from '../components/ui/Input';
 
 export function Register() {
   const [email, setEmail] = useState('');
@@ -58,17 +59,11 @@ export function Register() {
               <label className="block text-sm font-medium mb-1" style={{ color: 'var(--text-primary)' }}>
                 Email
               </label>
-              <input
+              <Input
                 type="email"
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
                 required
-                className="w-full px-3 py-2 rounded-md border focus:outline-none focus:ring-2 transition-colors"
-                style={{
-                  backgroundColor: 'var(--surface)',
-                  borderColor: 'var(--color-border)',
-                  color: 'var(--text-primary)',
-                }}
               />
             </div>
 
@@ -76,17 +71,11 @@ export function Register() {
               <label className="block text-sm font-medium mb-1" style={{ color: 'var(--text-primary)' }}>
                 Senha
               </label>
-              <input
+              <Input
                 type="password"
                 value={password}
                 onChange={(e) => setPassword(e.target.value)}
                 required
-                className="w-full px-3 py-2 rounded-md border focus:outline-none focus:ring-2 transition-colors"
-                style={{
-                  backgroundColor: 'var(--surface)',
-                  borderColor: 'var(--color-border)',
-                  color: 'var(--text-primary)',
-                }}
               />
             </div>
 
@@ -94,17 +83,11 @@ export function Register() {
               <label className="block text-sm font-medium mb-1" style={{ color: 'var(--text-primary)' }}>
                 Confirmar Senha
               </label>
-              <input
+              <Input
                 type="password"
                 value={confirmPassword}
                 onChange={(e) => setConfirmPassword(e.target.value)}
                 required
-                className="w-full px-3 py-2 rounded-md border focus:outline-none focus:ring-2 transition-colors"
-                style={{
-                  backgroundColor: 'var(--surface)',
-                  borderColor: 'var(--color-border)',
-                  color: 'var(--text-primary)',
-                }}
               />
             </div>
 

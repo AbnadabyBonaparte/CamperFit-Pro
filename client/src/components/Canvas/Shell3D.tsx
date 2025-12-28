@@ -1,8 +1,9 @@
 import { useEffect, useRef } from 'react';
 import * as THREE from 'three';
-import { useProjectStore } from '../../stores/projectStore';
 import { getVehicleById, defaultVehicle, Vehicle } from '../../constants/vehicles';
-import { getMaterialById, Material } from '../../constants/materials';
+import { getMaterialById } from '../../constants/materials';
+import { FALLBACK_COLORS } from '../../../shared/consts/threeJsConstants';
+import { getThemeColorForThree } from '../../utils/getThemeColorForThree';
 
 export interface ShellParams {
   // Dimensões principais
@@ -102,8 +103,14 @@ export function Shell3D({ vehicleId, params, scene }: Shell3DProps) {
 
     // Cores dos materiais (Three.js requer hex)
     // Usar visualColor do material ou cor padrão neutra
-    const externalColor = externalMaterial?.visualColor || '#c0c0c0'; // Prateado padrão
-    const structureColor = structureMaterial?.visualColor || '#8b8b8b'; // Cinza metálico padrão
+    const externalColorHex = externalMaterial?.visualColor || FALLBACK_COLORS.surface;
+    const structureColorHex = structureMaterial?.visualColor || FALLBACK_COLORS.border;
+    const externalColor = new THREE.Color(
+      getThemeColorForThree('--surface', externalColorHex)
+    );
+    const structureColor = new THREE.Color(
+      getThemeColorForThree('--color-border', structureColorHex)
+    );
 
     // === CORPO PRINCIPAL ===
     const mainBodyLength = params.floorLength;

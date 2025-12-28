@@ -1,6 +1,8 @@
 import { useEffect, useRef } from 'react';
 import * as THREE from 'three';
 import { Vehicle, getVehicleById, defaultVehicle } from '../../constants/vehicles';
+import { FALLBACK_COLORS } from '../../../shared/consts/threeJsConstants';
+import { getThemeColorForThree } from '../../utils/getThemeColorForThree';
 
 interface Vehicle3DProps {
   vehicleId?: string;
@@ -38,7 +40,7 @@ export function Vehicle3D({ vehicleId, scene }: Vehicle3DProps) {
     // Material do veículo (Three.js requer hex)
     // Usar cor neutra escura para veículo
     const vehicleMaterial = new THREE.MeshStandardMaterial({
-      color: '#2c3e50', // Azul escuro/cinza (cor padrão para veículos)
+      color: getThemeColorForThree('--text-primary', FALLBACK_COLORS.vehicleBody),
       metalness: 0.7,
       roughness: 0.3,
     });
@@ -70,7 +72,7 @@ export function Vehicle3D({ vehicleId, scene }: Vehicle3DProps) {
     // === RODAS (simplificadas como cilindros) ===
     // Three.js requer hex - usar preto padrão para rodas
     const wheelMaterial = new THREE.MeshStandardMaterial({
-      color: '#1a1a1a', // Preto (cor padrão para rodas)
+      color: getThemeColorForThree('--text-primary', FALLBACK_COLORS.wheel),
       metalness: 0.1,
       roughness: 0.9,
     });
@@ -105,7 +107,7 @@ export function Vehicle3D({ vehicleId, scene }: Vehicle3DProps) {
     );
     // Chassi (Three.js requer hex)
     const chassisMaterial = new THREE.MeshStandardMaterial({
-      color: '#34495e', // Cinza metálico (cor padrão para chassi)
+      color: getThemeColorForThree('--text-secondary', FALLBACK_COLORS.chassis),
       metalness: 0.8,
       roughness: 0.2,
     });

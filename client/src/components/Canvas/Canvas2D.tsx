@@ -2,6 +2,7 @@ import { useEffect, useRef, useState, useCallback } from 'react';
 import { useProjectStore } from '../../stores/projectStore';
 import { useUIStore } from '../../stores/uiStore';
 import { CANVAS_DEFAULT_WIDTH, CANVAS_DEFAULT_HEIGHT } from '../../../shared/const';
+import { FALLBACK_COLORS } from '../../../shared/consts/threeJsConstants';
 
 interface Canvas2DProps {
   width?: number;
@@ -18,13 +19,18 @@ export function Canvas2D({ width = CANVAS_DEFAULT_WIDTH, height = CANVAS_DEFAULT
   const { components, selectComponent, updateComponent } = useProjectStore();
   const { showGrid, gridSize, zoom, pan, setPan } = useUIStore();
 
+  const getCssColor = (variable: string, fallback: string) => {
+    const value = getComputedStyle(document.documentElement).getPropertyValue(variable).trim();
+    return value || fallback;
+  };
+
   // Draw grid
   const drawGrid = useCallback((ctx: CanvasRenderingContext2D, width: number, height: number) => {
     if (!showGrid) return;
 
     // Use CSS variable for grid color (convert to hex for canvas)
     // Default to gray-200 (#e5e7eb) if CSS variable not available
-    const gridColor = getComputedStyle(document.documentElement).getPropertyValue('--color-border').trim() || '#e5e7eb';
+    const gridColor = getCssColor('--color-border', FALLBACK_COLORS.gridSecondary);
     ctx.strokeStyle = gridColor;
     ctx.lineWidth = 1;
 
@@ -56,12 +62,12 @@ export function Canvas2D({ width = CANVAS_DEFAULT_WIDTH, height = CANVAS_DEFAULT
 
       // Draw component rectangle
       // Use CSS variables for colors (convert to hex for canvas)
-      const primaryColor = getComputedStyle(document.documentElement).getPropertyValue('--color-primary').trim() || '#3b82f6';
-      const primaryDarkColor = getComputedStyle(document.documentElement).getPropertyValue('--color-primary').trim() || '#1d4ed8';
-      const textColor = getComputedStyle(document.documentElement).getPropertyValue('--color-text').trim() || '#374151';
-      const surfaceColor = getComputedStyle(document.documentElement).getPropertyValue('--color-surface').trim() || '#ffffff';
-      const defaultComponentColor = '#6b7280'; // Neutral gray
-      
+      const primaryColor = getCssColor('--color-primary', FALLBACK_COLORS.selection);
+      const primaryDarkColor = getCssColor('--color-primary', FALLBACK_COLORS.selection);
+      const textColor = getCssColor('--text-primary', FALLBACK_COLORS.textPrimary);
+      const surfaceColor = getCssColor('--surface', FALLBACK_COLORS.surface);
+      const defaultComponentColor = FALLBACK_COLORS.componentDefault;
+
       ctx.fillStyle = component.selected ? primaryColor : component.color || defaultComponentColor;
       ctx.strokeStyle = component.selected ? primaryDarkColor : textColor;
       ctx.lineWidth = component.selected ? 3 : 2;

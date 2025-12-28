@@ -9,9 +9,23 @@ import { useUIStore } from '../../stores/uiStore';
 import { getComponentGeometry, getComponentMaterial } from './ModelLibrary';
 import { Shell3D } from './Shell3D';
 import { Vehicle3D } from './Vehicle3D';
-import { defaultVehicle } from '../../constants/vehicles';
 import { Button } from '../ui/Button';
 import { CANVAS_DEFAULT_WIDTH, CANVAS_DEFAULT_HEIGHT } from '../../../shared/const';
+import {
+  CAMERA_FAR,
+  CAMERA_FOV,
+  CAMERA_NEAR,
+  CAMERA_START_POSITION,
+  FALLBACK_COLORS,
+  FLOOR_OPACITY,
+  FLOOR_SIZE,
+  GRID_DIVISIONS,
+  GRID_SNAP_SIZE,
+  GRID_WORLD_SIZE,
+  LIGHT_POSITIONS,
+  SHADOW_MAP_SIZE,
+} from '../../../shared/consts/threeJsConstants';
+import { getThemeColorForThree } from '../../utils/getThemeColorForThree';
 
 interface Canvas3DProps {
   width?: number;
@@ -40,17 +54,17 @@ export function Canvas3D({ width = CANVAS_DEFAULT_WIDTH, height = CANVAS_DEFAULT
 
     // Scene
     const scene = new THREE.Scene();
-    scene.background = new THREE.Color(0xf0f0f0);
+    const sceneBackground = getThemeColorForThree('--surface', FALLBACK_COLORS.sceneBackground);
+    scene.background = new THREE.Color(sceneBackground);
     sceneRef.current = scene;
 
     // Camera
-    const camera = new THREE.PerspectiveCamera(
-      75,
-      width / height,
-      0.1,
-      10000
+    const camera = new THREE.PerspectiveCamera(CAMERA_FOV, width / height, CAMERA_NEAR, CAMERA_FAR);
+    camera.position.set(
+      CAMERA_START_POSITION.x,
+      CAMERA_START_POSITION.y,
+      CAMERA_START_POSITION.z
     );
-    camera.position.set(5000, 3000, 5000);
     camera.lookAt(0, 0, 0);
     cameraRef.current = camera;
 
@@ -75,27 +89,39 @@ export function Canvas3D({ width = CANVAS_DEFAULT_WIDTH, height = CANVAS_DEFAULT
     pointerLockRef.current = pointerLock;
 
     // Lights
-    const ambientLight = new THREE.AmbientLight(0xffffff, 0.6);
+    const ambientLight = new THREE.AmbientLight(
+      getThemeColorForThree('--color-surface', FALLBACK_COLORS.ambientLight),
+      0.6
+    );
     scene.add(ambientLight);
 
-    const directionalLight = new THREE.DirectionalLight(0xffffff, 0.8);
-    directionalLight.position.set(5000, 10000, 5000);
+    const directionalLight = new THREE.DirectionalLight(
+      getThemeColorForThree('--color-surface', FALLBACK_COLORS.directionalLight),
+      0.8
+    );
+    directionalLight.position.set(
+      LIGHT_POSITIONS.directional.x,
+      LIGHT_POSITIONS.directional.y,
+      LIGHT_POSITIONS.directional.z
+    );
     directionalLight.castShadow = true;
-    directionalLight.shadow.mapSize.width = 2048;
-    directionalLight.shadow.mapSize.height = 2048;
+    directionalLight.shadow.mapSize.width = SHADOW_MAP_SIZE;
+    directionalLight.shadow.mapSize.height = SHADOW_MAP_SIZE;
     scene.add(directionalLight);
 
     // Grid Helper
-    const gridHelper = new THREE.GridHelper(10000, 100, 0x888888, 0xcccccc);
+    const gridPrimary = getThemeColorForThree('--color-border', FALLBACK_COLORS.gridPrimary);
+    const gridSecondary = getThemeColorForThree('--color-border', FALLBACK_COLORS.gridSecondary);
+    const gridHelper = new THREE.GridHelper(GRID_WORLD_SIZE, GRID_DIVISIONS, gridPrimary, gridSecondary);
     gridHelper.visible = showGrid;
     scene.add(gridHelper);
 
     // Floor plane (for raycasting)
-    const floorGeometry = new THREE.PlaneGeometry(10000, 10000);
-    const floorMaterial = new THREE.MeshStandardMaterial({ 
-      color: 0xffffff,
+    const floorGeometry = new THREE.PlaneGeometry(FLOOR_SIZE, FLOOR_SIZE);
+    const floorMaterial = new THREE.MeshStandardMaterial({
+      color: getThemeColorForThree('--surface', FALLBACK_COLORS.floor),
       transparent: true,
-      opacity: 0.1,
+      opacity: FLOOR_OPACITY,
       side: THREE.DoubleSide
     });
     const floor = new THREE.Mesh(floorGeometry, floorMaterial);
@@ -166,7 +192,7 @@ export function Canvas3D({ width = CANVAS_DEFAULT_WIDTH, height = CANVAS_DEFAULT
         
         if (intersectionPoint) {
           // Snap to grid (50mm)
-          const gridSize = 50;
+          const gridSize = GRID_SNAP_SIZE;
           intersectionPoint.x = Math.round(intersectionPoint.x / gridSize) * gridSize;
           intersectionPoint.y = intersectionPoint.y; // Keep Y as is (will be adjusted by component height)
           intersectionPoint.z = Math.round(intersectionPoint.z / gridSize) * gridSize;
@@ -314,18 +340,14 @@ export function Canvas3D({ width = CANVAS_DEFAULT_WIDTH, height = CANVAS_DEFAULT
       // If dimensions change significantly, the component should be recreated
 
       // Update color (use component color or default from theme)
-      // Note: Three.js requires hex colors, so we use a default gray
       if (mesh.material instanceof THREE.MeshStandardMaterial) {
-        const defaultColor = '#6b7280'; // Neutral gray (matches theme text-secondary)
-        const newColor = component.color || defaultColor;
-        mesh.material.color.set(newColor);
-      }
+        const defaultColor = component.color || FALLBACK_COLORS.componentDefault;
+        mesh.material.color.set(defaultColor);
 
-      // Update selection highlight (use primary color from theme)
-      // Note: Three.js requires hex, using primary color (0x3b82f6 = blue-500)
-      const isSelected = component.id === selectedComponentId;
-      if (mesh.material instanceof THREE.MeshStandardMaterial) {
-        mesh.material.emissive.setHex(isSelected ? 0x3b82f6 : 0x000000);
+        const primaryHex = getThemeColorForThree('--color-primary', FALLBACK_COLORS.selection);
+        const neutralHex = parseInt(FALLBACK_COLORS.emissiveOff.replace('#', ''), 16);
+        const isSelected = component.id === selectedComponentId;
+        mesh.material.emissive.setHex(isSelected ? primaryHex : neutralHex);
         mesh.material.emissiveIntensity = isSelected ? 0.3 : 0;
       }
     });

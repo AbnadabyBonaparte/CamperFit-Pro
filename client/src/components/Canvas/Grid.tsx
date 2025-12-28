@@ -1,4 +1,5 @@
 import { useUIStore } from '../../stores/uiStore';
+import { FALLBACK_COLORS } from '../../../shared/consts/threeJsConstants';
 
 interface GridProps {
   width: number;
@@ -12,6 +13,7 @@ export function Grid({ width, height }: GridProps) {
 
   const lines: JSX.Element[] = [];
   const spacing = gridSize * zoom;
+  const strokeColor = `var(--color-border, ${FALLBACK_COLORS.border})`;
 
   // Vertical lines
   const startX = Math.floor(pan.x / spacing) * spacing;
@@ -23,7 +25,7 @@ export function Grid({ width, height }: GridProps) {
         y1={0}
         x2={x - pan.x}
         y2={height}
-        stroke="var(--color-border)"
+        stroke={strokeColor}
         strokeWidth={1}
       />
     );
@@ -39,7 +41,7 @@ export function Grid({ width, height }: GridProps) {
         y1={y - pan.y}
         x2={width}
         y2={y - pan.y}
-        stroke="var(--color-border)"
+        stroke={strokeColor}
         strokeWidth={1}
       />
     );
