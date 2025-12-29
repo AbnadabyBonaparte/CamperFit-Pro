@@ -36,6 +36,8 @@
     "eslint": "^8.54.0",
     "typescript": "^5.3.3",
     "vitest": "^1.0.0"
+  },
+  "dependencies": {
+    "drizzle-orm": "^0.45.1"
   }
 }
-
