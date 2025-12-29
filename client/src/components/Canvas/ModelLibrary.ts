@@ -1,5 +1,5 @@
 import * as THREE from 'three';
-import { FALLBACK_COLORS } from '../../../shared/consts/threeJsConstants';
+import { FALLBACK_COLORS } from '@/shared/consts/threeJsConstants';
 
 /**
  * Model library for different component types

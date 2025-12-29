@@ -1,9 +1,9 @@
 import { useEffect, useRef } from 'react';
 import * as THREE from 'three';
 import { Vehicle, getVehicleById, defaultVehicle } from '../../constants/vehicles';
-import { FALLBACK_COLORS } from '../../../shared/consts/threeJsConstants';
+import { FALLBACK_COLORS } from '@/shared/consts/threeJsConstants';
 import { getThemeColorForThree } from '../../utils/getThemeColorForThree';
-import { TIRE_WIDTH_MM } from '../../../shared/const';
+import { TIRE_WIDTH_MM } from '@/shared/const';
 
 interface Vehicle3DProps {
   vehicleId?: string;

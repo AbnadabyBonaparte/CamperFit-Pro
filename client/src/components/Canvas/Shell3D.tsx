@@ -2,7 +2,7 @@ import { useEffect, useRef } from 'react';
 import * as THREE from 'three';
 import { getVehicleById, defaultVehicle, Vehicle } from '../../constants/vehicles';
 import { getMaterialById } from '../../constants/materials';
-import { FALLBACK_COLORS } from '../../../shared/consts/threeJsConstants';
+import { FALLBACK_COLORS } from '@/shared/consts/threeJsConstants';
 import { getThemeColorForThree } from '../../utils/getThemeColorForThree';
 
 export interface ShellParams {

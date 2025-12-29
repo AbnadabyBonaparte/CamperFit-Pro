@@ -10,7 +10,7 @@ import { getComponentGeometry, getComponentMaterial } from './ModelLibrary';
 import { Shell3D } from './Shell3D';
 import { Vehicle3D } from './Vehicle3D';
 import { Button } from '../ui/Button';
-import { CANVAS_DEFAULT_WIDTH, CANVAS_DEFAULT_HEIGHT } from '../../../shared/const';
+import { CANVAS_DEFAULT_WIDTH, CANVAS_DEFAULT_HEIGHT } from '@/shared/const';
 import {
   CAMERA_FAR,
   CAMERA_FOV,
@@ -24,7 +24,7 @@ import {
   GRID_WORLD_SIZE,
   LIGHT_POSITIONS,
   SHADOW_MAP_SIZE,
-} from '../../../shared/consts/threeJsConstants';
+} from '@/shared/consts/threeJsConstants';
 import { getThemeColorForThree } from '../../utils/getThemeColorForThree';
 
 interface Canvas3DProps {

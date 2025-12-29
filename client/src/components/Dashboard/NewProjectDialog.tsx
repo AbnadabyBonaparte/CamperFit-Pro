@@ -4,7 +4,7 @@ import { Button } from '../ui/Button';
 import { Input } from '../ui/Input';
 import { Textarea } from '../ui/Textarea';
 import { Select } from '../ui/Select';
-import { DEFAULT_VEHICLE_DIMENSIONS } from '../../../shared/const';
+import { DEFAULT_VEHICLE_DIMENSIONS } from '@/shared/const';
 
 interface NewProjectDialogProps {
   isOpen: boolean;

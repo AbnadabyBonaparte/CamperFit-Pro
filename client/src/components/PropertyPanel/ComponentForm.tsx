@@ -3,7 +3,7 @@ import { useProjectStore } from '../../stores/projectStore';
 import { Input } from '../ui/Input';
 import { Button } from '../ui/Button';
 import { ColorInput } from '../ui/ColorInput';
-import { FALLBACK_COLORS } from '../../../shared/consts/threeJsConstants';
+import { FALLBACK_COLORS } from '@/shared/consts/threeJsConstants';
 
 interface Component {
   id: string;

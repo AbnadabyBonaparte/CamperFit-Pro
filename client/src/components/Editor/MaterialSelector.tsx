@@ -6,7 +6,7 @@ import { Card, CardContent } from '../ui/Card';
 import { Badge } from '../ui/Badge';
 import { Skeleton } from '../ui/Skeleton';
 import { Alert } from '../ui/Alert';
-import { DEFAULT_FALLBACK_DIMENSIONS } from '../../../shared/const';
+import { DEFAULT_FALLBACK_DIMENSIONS } from '@/shared/const';
 
 const categories: MaterialCategory[] = ['estrutura', 'revestimento-externo', 'isolamento', 'revestimento-interno'];
 

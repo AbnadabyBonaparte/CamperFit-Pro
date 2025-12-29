@@ -4,7 +4,7 @@ import { trpc } from '../../lib/trpc';
 import { materials } from '../../constants/materials';
 import { Skeleton } from '../ui/Skeleton';
 import { Alert } from '../ui/Alert';
-import { REFETCH_INTERVAL_MS } from '../../../shared/const';
+import { REFETCH_INTERVAL_MS } from '@/shared/const';
 
 export function StatsPanel() {
   const { currentProject, components } = useProjectStore();

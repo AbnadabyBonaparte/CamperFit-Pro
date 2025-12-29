@@ -2,7 +2,7 @@
  * Helper para obter cores de componentes usando FALLBACK_COLORS
  * Three.js requer hex, então convertemos de FALLBACK_COLORS
  */
-import { FALLBACK_COLORS } from '../../../shared/consts/threeJsConstants';
+import { FALLBACK_COLORS } from '@/shared/consts/threeJsConstants';
 
 /**
  * Mapeamento de categorias de componentes para cores do FALLBACK_COLORS

@@ -1,5 +1,5 @@
 import { useUIStore } from '../../stores/uiStore';
-import { FALLBACK_COLORS } from '../../../shared/consts/threeJsConstants';
+import { FALLBACK_COLORS } from '@/shared/consts/threeJsConstants';
 
 interface GridProps {
   width: number;

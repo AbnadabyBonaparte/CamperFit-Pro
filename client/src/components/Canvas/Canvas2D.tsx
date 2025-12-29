@@ -1,8 +1,8 @@
 import { useEffect, useRef, useState, useCallback } from 'react';
 import { useProjectStore } from '../../stores/projectStore';
 import { useUIStore } from '../../stores/uiStore';
-import { CANVAS_DEFAULT_WIDTH, CANVAS_DEFAULT_HEIGHT } from '../../../shared/const';
-import { FALLBACK_COLORS } from '../../../shared/consts/threeJsConstants';
+import { CANVAS_DEFAULT_WIDTH, CANVAS_DEFAULT_HEIGHT } from '@/shared/const';
+import { FALLBACK_COLORS } from '@/shared/consts/threeJsConstants';
 
 interface Canvas2DProps {
   width?: number;

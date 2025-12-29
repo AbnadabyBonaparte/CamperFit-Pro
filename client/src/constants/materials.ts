@@ -6,7 +6,7 @@
  */
 
 import { getMaterialColor } from '../utils/getComponentColor';
-import { MM_TO_M } from '../../../shared/const';
+import { MM_TO_M } from '@/shared/const';
 
 export type MaterialCategory = 
   | 'estrutura' 
